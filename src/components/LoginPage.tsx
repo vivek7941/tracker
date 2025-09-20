@@ -48,7 +48,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                   <Wallet className="h-8 w-8 text-white" />
                 </div>
                 <h1 className="text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  SmartBudget Pro
+                  SmartBudget
                 </h1>
               </div>
               
