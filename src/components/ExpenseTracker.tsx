@@ -80,7 +80,7 @@ const ExpenseTracker = () => {
         <div>
           <h2 className="text-2xl font-bold">Expense Tracker</h2>
           <p className="text-muted-foreground">
-            Total this month: <span className="font-semibold text-expense">${totalExpenses.toLocaleString()}</span>
+            Total this month: <span className="font-semibold text-expense">₹{totalExpenses.toLocaleString()}</span>
           </p>
         </div>
         
@@ -112,7 +112,7 @@ const ExpenseTracker = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="amount">Amount ($)</Label>
+                  <Label htmlFor="amount">Amount (₹)</Label>
                   <Input
                     id="amount"
                     type="number"
@@ -253,7 +253,7 @@ const ExpenseTracker = () => {
                   
                   <div className="text-right">
                     <p className="text-lg font-semibold text-expense">
-                      -${expense.amount.toFixed(2)}
+                      -₹{expense.amount.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ const ExpenseTracker = () => {
             <CardTitle className="text-lg">Today's Spending</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-expense">$67.25</p>
+            <p className="text-2xl font-bold text-expense">₹67.25</p>
             <p className="text-sm text-muted-foreground">3 transactions</p>
           </CardContent>
         </Card>
@@ -280,7 +280,7 @@ const ExpenseTracker = () => {
             <CardTitle className="text-lg">Weekly Average</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-foreground">$215.80</p>
+            <p className="text-2xl font-bold text-foreground">₹215.80</p>
             <p className="text-sm text-muted-foreground">Down 12% from last week</p>
           </CardContent>
         </Card>

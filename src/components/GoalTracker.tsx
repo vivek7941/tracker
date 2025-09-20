@@ -183,7 +183,7 @@ const GoalTracker = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="target-amount">Target Amount ($)</Label>
+                  <Label htmlFor="target-amount">Target Amount (₹)</Label>
                   <Input
                     id="target-amount"
                     type="number"
@@ -194,7 +194,7 @@ const GoalTracker = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="current-amount">Current Amount ($)</Label>
+                  <Label htmlFor="current-amount">Current Amount (₹)</Label>
                   <Input
                     id="current-amount"
                     type="number"
@@ -217,7 +217,7 @@ const GoalTracker = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="monthly">Monthly Contribution ($)</Label>
+                  <Label htmlFor="monthly">Monthly Contribution (₹)</Label>
                   <Input
                     id="monthly"
                     type="number"
@@ -284,10 +284,10 @@ const GoalTracker = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-success">
-              ${totalSaved.toLocaleString()}
+              ₹{totalSaved.toLocaleString()}
             </div>
             <p className="text-sm text-muted-foreground">
-              ${totalGoalsValue.toLocaleString()} target
+              ₹{totalGoalsValue.toLocaleString()} target
             </p>
           </CardContent>
         </Card>
@@ -346,13 +346,13 @@ const GoalTracker = () => {
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">Progress</span>
                     <span className="text-muted-foreground">
-                      ${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}
+                      ₹{goal.currentAmount.toLocaleString()} / ₹{goal.targetAmount.toLocaleString()}
                     </span>
                   </div>
                   <Progress value={progress} className="h-3" />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{progress.toFixed(1)}% complete</span>
-                    <span>${(goal.targetAmount - goal.currentAmount).toLocaleString()} remaining</span>
+                    <span>₹{(goal.targetAmount - goal.currentAmount).toLocaleString()} remaining</span>
                   </div>
                 </div>
 
@@ -367,13 +367,13 @@ const GoalTracker = () => {
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Required/Month</p>
                     <p className="text-lg font-semibold text-warning">
-                      ${requiredMonthly.toFixed(0)}
+                      ₹{requiredMonthly.toFixed(0)}
                     </p>
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Current/Month</p>
                     <p className={`text-lg font-semibold ${isOnTrack ? 'text-success' : 'text-destructive'}`}>
-                      ${goal.monthlyContribution}
+                      ₹{goal.monthlyContribution}
                     </p>
                   </div>
                 </div>

@@ -179,7 +179,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-foreground">
-                      ${userStats.totalBalance.toLocaleString()}
+                      ₹{userStats.totalBalance.toLocaleString()}
                     </div>
                     <p className="text-xs text-success flex items-center gap-1 mt-1">
                       <TrendingUp className="h-3 w-3" />
@@ -197,7 +197,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-success">
-                      ${userStats.monthlyIncome.toLocaleString()}
+                      ₹{userStats.monthlyIncome.toLocaleString()}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       Salary & side income
@@ -214,7 +214,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-expense">
-                      ${userStats.monthlyExpenses.toLocaleString()}
+                      ₹{userStats.monthlyExpenses.toLocaleString()}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       {Math.round((userStats.monthlyExpenses / userStats.monthlyIncome) * 100)}% of income
@@ -267,7 +267,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-expense">-${expense.amount}</p>
+                          <p className="font-medium text-expense">-₹{expense.amount}</p>
                           <Badge variant="outline" className="text-xs">
                             {expense.category}
                           </Badge>
@@ -289,13 +289,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                         <div className="flex justify-between text-sm">
                           <span className="font-medium">{category.name}</span>
                           <span className="text-muted-foreground">
-                            ${category.spent} / ${category.budget}
+                            ₹{category.spent} / ₹{category.budget}
                           </span>
                         </div>
                         <Progress value={category.percentage} className="h-2" />
                         <div className="flex justify-between text-xs text-muted-foreground">
                           <span>{category.percentage}% used</span>
-                          <span>${category.budget - category.spent} remaining</span>
+                          <span>₹{category.budget - category.spent} remaining</span>
                         </div>
                       </div>
                     ))}
@@ -324,14 +324,14 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                         </div>
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
-                            <span>${goal.current.toLocaleString()}</span>
+                            <span>₹{goal.current.toLocaleString()}</span>
                             <span className="text-muted-foreground">
-                              ${goal.target.toLocaleString()}
+                              ₹{goal.target.toLocaleString()}
                             </span>
                           </div>
                           <Progress value={goal.percentage} className="h-2" />
                           <p className="text-xs text-muted-foreground">
-                            {goal.percentage}% complete • ${goal.target - goal.current} remaining
+                            {goal.percentage}% complete • ₹{goal.target - goal.current} remaining
                           </p>
                         </div>
                       </div>

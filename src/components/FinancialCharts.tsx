@@ -49,7 +49,7 @@ const FinancialCharts = () => {
           <p className="font-medium">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.dataKey}: ${entry.value?.toLocaleString()}
+              {entry.dataKey}: ₹{entry.value?.toLocaleString()}
             </p>
           ))}
         </div>
@@ -88,7 +88,7 @@ const FinancialCharts = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => [`$${value}`, 'Amount']} />
+                  <Tooltip formatter={(value: number) => [`₹${value}`, 'Amount']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -212,7 +212,7 @@ const FinancialCharts = () => {
                 <TrendingUp className="h-4 w-4 text-success" />
                 <span className="text-sm font-medium">Avg. Monthly</span>
               </div>
-              <p className="text-xl font-bold text-success">$1,408</p>
+              <p className="text-xl font-bold text-success">₹1,408</p>
               <p className="text-xs text-muted-foreground">17% above target</p>
             </div>
             <div className="text-center">
@@ -220,7 +220,7 @@ const FinancialCharts = () => {
                 <Target className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">Best Month</span>
               </div>
-              <p className="text-xl font-bold text-primary">$1,600</p>
+              <p className="text-xl font-bold text-primary">₹1,600</p>
               <p className="text-xs text-muted-foreground">March 2024</p>
             </div>
             <div className="text-center">

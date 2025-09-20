@@ -162,7 +162,7 @@ const BudgetOverview = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="budget-amount">Budget Amount ($)</Label>
+                  <Label htmlFor="budget-amount">Budget Amount (₹)</Label>
                   <Input
                     id="budget-amount"
                     type="number"
@@ -211,7 +211,7 @@ const BudgetOverview = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">
-              ${totalBudget.toLocaleString()}
+              ₹{totalBudget.toLocaleString()}
             </div>
             <p className="text-sm text-muted-foreground">This month</p>
           </CardContent>
@@ -226,7 +226,7 @@ const BudgetOverview = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-expense">
-              ${totalSpent.toLocaleString()}
+              ₹{totalSpent.toLocaleString()}
             </div>
             <p className="text-sm text-muted-foreground">
               {overallProgress.toFixed(1)}% of budget
@@ -243,7 +243,7 @@ const BudgetOverview = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-success">
-              ${remainingBudget.toLocaleString()}
+              ₹{remainingBudget.toLocaleString()}
             </div>
             <p className="text-sm text-muted-foreground">Available to spend</p>
           </CardContent>
@@ -276,7 +276,7 @@ const BudgetOverview = () => {
             <div className="flex justify-between text-sm">
               <span className="font-medium">Monthly Progress</span>
               <span className="text-muted-foreground">
-                ${totalSpent.toLocaleString()} / ${totalBudget.toLocaleString()}
+                ₹{totalSpent.toLocaleString()} / ₹{totalBudget.toLocaleString()}
               </span>
             </div>
             <Progress value={overallProgress} className="h-4" />
@@ -329,7 +329,7 @@ const BudgetOverview = () => {
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">Spent</span>
                     <span className="text-muted-foreground">
-                      ${budget.spentAmount.toLocaleString()} / ${budget.budgetAmount.toLocaleString()}
+                      ₹{budget.spentAmount.toLocaleString()} / ₹{budget.budgetAmount.toLocaleString()}
                     </span>
                   </div>
                   <Progress 
@@ -339,7 +339,7 @@ const BudgetOverview = () => {
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{progress.toFixed(1)}% used</span>
                     <span>
-                      {remaining >= 0 ? `$${remaining.toLocaleString()} remaining` : `$${Math.abs(remaining).toLocaleString()} over`}
+                      {remaining >= 0 ? `₹${remaining.toLocaleString()} remaining` : `₹${Math.abs(remaining).toLocaleString()} over`}
                     </span>
                   </div>
                 </div>
@@ -349,13 +349,13 @@ const BudgetOverview = () => {
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Daily Avg</p>
                     <p className="text-lg font-semibold text-foreground">
-                      ${(budget.spentAmount / 30).toFixed(0)}
+                      ₹{(budget.spentAmount / 30).toFixed(0)}
                     </p>
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Recommended Daily</p>
                     <p className="text-lg font-semibold text-primary">
-                      ${(budget.budgetAmount / 30).toFixed(0)}
+                      ₹{(budget.budgetAmount / 30).toFixed(0)}
                     </p>
                   </div>
                   <div className="text-center">
