@@ -28,14 +28,14 @@ const ExpenseTracker = () => {
   });
 
   const categories = [
-    { name: "Food", icon: ShoppingCart, color: "bg-orange-500" },
-    { name: "Transport", icon: Car, color: "bg-blue-500" },
-    { name: "Utilities", icon: Home, color: "bg-green-500" },
-    { name: "Entertainment", icon: Gamepad2, color: "bg-purple-500" },
-    { name: "Healthcare", icon: Heart, color: "bg-red-500" },
-    { name: "Education", icon: BookOpen, color: "bg-indigo-500" },
-    { name: "Travel", icon: Plane, color: "bg-cyan-500" },
-    { name: "Other", icon: Coffee, color: "bg-gray-500" },
+    { name: "Food", icon: ShoppingCart, color: "category-food" },
+    { name: "Transport", icon: Car, color: "category-transport" },
+    { name: "Utilities", icon: Home, color: "category-utilities" },
+    { name: "Entertainment", icon: Gamepad2, color: "category-entertainment" },
+    { name: "Healthcare", icon: Heart, color: "category-healthcare" },
+    { name: "Education", icon: BookOpen, color: "category-education" },
+    { name: "Travel", icon: Plane, color: "category-travel" },
+    { name: "Other", icon: Coffee, color: "category-shopping" },
   ];
 
   const handleAddExpense = () => {
@@ -68,33 +68,38 @@ const ExpenseTracker = () => {
 
   const getCategoryColor = (categoryName: string) => {
     const category = categories.find(cat => cat.name === categoryName);
-    return category?.color || "bg-gray-500";
+    return category?.color || "category-shopping";
   };
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
 
   return (
-    <div className="space-y-6 animate-scale-in">
-      {/* Header with Add Button */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Expense Tracker</h2>
-          <p className="text-muted-foreground">
-            Total this month: <span className="font-semibold text-expense">₹{totalExpenses.toLocaleString()}</span>
-          </p>
+    <div className="space-y-8 animate-scale-in bg-muted/20 min-h-screen p-8">
+      {/* Professional Header */}
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h2 className="text-3xl font-bold tracking-tight">Expense Tracker</h2>
+          <div className="flex items-center gap-4">
+            <p className="text-muted-foreground text-lg">
+              Total this month: <span className="font-semibold text-expense">₹{totalExpenses.toLocaleString()}</span>
+            </p>
+            <div className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+              {expenses.length} transactions
+            </div>
+          </div>
         </div>
         
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="btn-3d bg-gradient-primary text-white">
+            <Button className="btn-3d bg-primary text-white hover:bg-primary/90 shadow-md">
               <Plus className="h-4 w-4 mr-2" />
               Add Expense
             </Button>
           </DialogTrigger>
-          <DialogContent className="card-3d">
-            <DialogHeader>
-              <DialogTitle>Add New Expense</DialogTitle>
-              <DialogDescription>
+          <DialogContent className="card-elevated border-0 max-w-md">
+            <DialogHeader className="space-y-3">
+              <DialogTitle className="text-2xl font-semibold">Add New Expense</DialogTitle>
+              <DialogDescription className="text-base text-muted-foreground">
                 Track your spending by adding expense details below.
               </DialogDescription>
             </DialogHeader>
@@ -165,10 +170,10 @@ const ExpenseTracker = () => {
             </div>
             
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="border-border/60">
                 Cancel
               </Button>
-              <Button onClick={handleAddExpense} className="bg-gradient-primary text-white">
+              <Button onClick={handleAddExpense} className="bg-primary text-white hover:bg-primary/90">
                 Add Expense
               </Button>
             </DialogFooter>
@@ -176,34 +181,37 @@ const ExpenseTracker = () => {
         </Dialog>
       </div>
 
-      {/* Filters */}
-      <Card className="card-3d">
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
+      {/* Professional Filters Card */}
+      <Card className="card-elevated border-0">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold">Filters & Search</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search expenses..." className="w-64" />
+            <div className="relative flex-1 min-w-64">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Search expenses..." className="pl-10 border-border/60 focus:border-primary" />
             </div>
             
             <Select>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-52 border-border/60">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.name} value={category.name.toLowerCase()}>
-                    {category.name}
+                    <div className="flex items-center gap-2">
+                      <category.icon className="h-4 w-4" />
+                      {category.name}
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             
             <Select>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 border-border/60">
                 <SelectValue placeholder="Date range" />
               </SelectTrigger>
               <SelectContent>
@@ -217,42 +225,42 @@ const ExpenseTracker = () => {
         </CardContent>
       </Card>
 
-      {/* Expense List */}
-      <Card className="card-3d">
-        <CardHeader>
-          <CardTitle>Recent Expenses</CardTitle>
-          <CardDescription>Your latest transactions and spending</CardDescription>
+      {/* Professional Expense List */}
+      <Card className="card-elevated border-0">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold">Recent Expenses</CardTitle>
+          <CardDescription className="text-muted-foreground">Your latest transactions and spending</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {expenses.map((expense, index) => {
               const IconComponent = expense.icon;
               return (
                 <div 
                   key={expense.id} 
-                  className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors animate-slide-in-up"
+                  className="flex items-center justify-between p-5 rounded-xl border border-border/40 hover:border-border/60 bg-card/50 hover:bg-card transition-all duration-200 animate-slide-in-up"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-full ${getCategoryColor(expense.category)}`}>
-                      <IconComponent className="h-5 w-5 text-white" />
+                    <div className={`category-icon ${getCategoryColor(expense.category)}`}>
+                      <IconComponent className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-foreground">{expense.description}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs">
+                      <h3 className="font-semibold text-foreground text-base">{expense.description}</h3>
+                      <div className="flex items-center gap-3 mt-1">
+                        <Badge variant="outline" className="text-xs border-border/40 font-medium">
                           {expense.category}
                         </Badge>
                         <span className="text-sm text-muted-foreground flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {new Date(expense.date).toLocaleDateString()}
+                          {new Date(expense.date).toLocaleDateString('en-IN')}
                         </span>
                       </div>
                     </div>
                   </div>
                   
                   <div className="text-right">
-                    <p className="text-lg font-semibold text-expense">
+                    <p className="text-xl font-bold text-expense">
                       -₹{expense.amount.toFixed(2)}
                     </p>
                   </div>
@@ -263,35 +271,49 @@ const ExpenseTracker = () => {
         </CardContent>
       </Card>
 
-      {/* Quick Stats */}
+      {/* Professional Quick Stats */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="text-lg">Today's Spending</CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-medium">Today's Spending</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-expense">₹67.25</p>
-            <p className="text-sm text-muted-foreground">3 transactions</p>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-expense">₹67.25</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span>3 transactions</span>
+                <span>•</span>
+                <span className="text-success">↓ 15% vs yesterday</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="text-lg">Weekly Average</CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-medium">Weekly Average</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-foreground">₹215.80</p>
-            <p className="text-sm text-muted-foreground">Down 12% from last week</p>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-primary">₹215.80</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="text-success">↓ 12% from last week</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="text-lg">Top Category</CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-medium">Top Category</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-primary">Food</p>
-            <p className="text-sm text-muted-foreground">42% of total spending</p>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-foreground">Food</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span>42% of total spending</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

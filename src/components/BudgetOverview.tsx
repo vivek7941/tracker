@@ -66,14 +66,14 @@ const BudgetOverview = () => {
   });
 
   const budgetCategories = [
-    { name: "Food & Dining", icon: ShoppingCart, color: "bg-orange-500" },
-    { name: "Transportation", icon: Car, color: "bg-blue-500" },
-    { name: "Utilities", icon: Home, color: "bg-green-500" },
-    { name: "Entertainment", icon: Gamepad2, color: "bg-purple-500" },
-    { name: "Healthcare", icon: Heart, color: "bg-red-500" },
-    { name: "Education", icon: BookOpen, color: "bg-indigo-500" },
-    { name: "Travel", icon: Plane, color: "bg-cyan-500" },
-    { name: "Shopping", icon: Coffee, color: "bg-pink-500" },
+    { name: "Food & Dining", icon: ShoppingCart, color: "category-food" },
+    { name: "Transportation", icon: Car, color: "category-transport" },
+    { name: "Utilities", icon: Home, color: "category-utilities" },
+    { name: "Entertainment", icon: Gamepad2, color: "category-entertainment" },
+    { name: "Healthcare", icon: Heart, color: "category-healthcare" },
+    { name: "Education", icon: BookOpen, color: "category-education" },
+    { name: "Travel", icon: Plane, color: "category-travel" },
+    { name: "Shopping", icon: Coffee, color: "category-shopping" },
   ];
 
   const handleAddBudget = () => {
@@ -85,7 +85,7 @@ const BudgetOverview = () => {
         budgetAmount: parseFloat(newBudget.budgetAmount),
         spentAmount: 0,
         icon: categoryData?.icon || ShoppingCart,
-        color: categoryData?.color || "bg-gray-500",
+        color: categoryData?.color || "category-shopping",
         period: newBudget.period
       };
       setBudgets([...budgets, budget]);
@@ -115,27 +115,36 @@ const BudgetOverview = () => {
   const overallProgress = (totalSpent / totalBudget) * 100;
 
   return (
-    <div className="space-y-6 animate-scale-in">
-      {/* Header with Add Button */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Budget Management</h2>
-          <p className="text-muted-foreground">
-            Overall Budget Usage: <span className="font-semibold text-primary">{overallProgress.toFixed(1)}%</span>
-          </p>
+    <div className="space-y-8 animate-scale-in bg-muted/20 min-h-screen p-8">
+      {/* Professional Header */}
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h2 className="text-3xl font-bold tracking-tight">Budget Management</h2>
+          <div className="flex items-center gap-4">
+            <p className="text-muted-foreground text-lg">
+              Overall Budget Usage: <span className="font-semibold text-primary">{overallProgress.toFixed(1)}%</span>
+            </p>
+            <div className={`px-3 py-1 text-sm font-medium rounded-full ${
+              overallProgress >= 90 ? 'bg-destructive/10 text-destructive' : 
+              overallProgress >= 75 ? 'bg-warning/10 text-warning' : 
+              'bg-success/10 text-success'
+            }`}>
+              {overallProgress >= 90 ? 'Over Budget' : overallProgress >= 75 ? 'Warning' : 'On Track'}
+            </div>
+          </div>
         </div>
         
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="btn-3d bg-gradient-primary text-white">
+            <Button className="btn-3d bg-primary text-white hover:bg-primary/90 shadow-md">
               <Plus className="h-4 w-4 mr-2" />
               Add Budget
             </Button>
           </DialogTrigger>
-          <DialogContent className="card-3d">
-            <DialogHeader>
-              <DialogTitle>Create New Budget</DialogTitle>
-              <DialogDescription>
+          <DialogContent className="card-elevated border-0">
+            <DialogHeader className="space-y-3">
+              <DialogTitle className="text-2xl font-semibold">Create New Budget</DialogTitle>
+              <DialogDescription className="text-base text-muted-foreground">
                 Set spending limits for different categories.
               </DialogDescription>
             </DialogHeader>
@@ -189,10 +198,10 @@ const BudgetOverview = () => {
             </div>
             
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="border-border/60">
                 Cancel
               </Button>
-              <Button onClick={handleAddBudget} className="bg-gradient-primary text-white">
+              <Button onClick={handleAddBudget} className="bg-primary text-white hover:bg-primary/90">
                 Create Budget
               </Button>
             </DialogFooter>
@@ -200,95 +209,110 @@ const BudgetOverview = () => {
         </Dialog>
       </div>
 
-      {/* Budget Summary Cards */}
+      {/* Professional Budget Summary Cards */}
       <div className="grid md:grid-cols-4 gap-6">
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-primary" />
-              Total Budget
-            </CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium text-muted-foreground">Total Budget</CardTitle>
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <DollarSign className="h-4 w-4 text-primary" />
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-3xl font-bold text-foreground tracking-tight">
               ₹{totalBudget.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground">This month</p>
+            <p className="text-sm text-muted-foreground mt-2">This month</p>
           </CardContent>
         </Card>
 
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-expense" />
-              Total Spent
-            </CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium text-muted-foreground">Total Spent</CardTitle>
+              <div className="p-2 bg-destructive/10 rounded-lg">
+                <TrendingUp className="h-4 w-4 text-destructive" />
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-expense">
+            <div className="text-3xl font-bold text-expense tracking-tight">
               ₹{totalSpent.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mt-2">
               {overallProgress.toFixed(1)}% of budget
             </p>
           </CardContent>
         </Card>
 
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-success" />
-              Remaining
-            </CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium text-muted-foreground">Remaining</CardTitle>
+              <div className="p-2 bg-success/10 rounded-lg">
+                <CheckCircle className="h-4 w-4 text-success" />
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">
+            <div className="text-3xl font-bold text-success tracking-tight">
               ₹{remainingBudget.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground">Available to spend</p>
+            <p className="text-sm text-muted-foreground mt-2">Available to spend</p>
           </CardContent>
         </Card>
 
-        <Card className="card-3d">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-warning" />
-              Over Budget
-            </CardTitle>
+        <Card className="card-elevated border-0">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium text-muted-foreground">Over Budget</CardTitle>
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-4 w-4 text-warning" />
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-warning">
+            <div className="text-3xl font-bold text-warning tracking-tight">
               {budgets.filter(b => (b.spentAmount / b.budgetAmount) > 1).length}
             </div>
-            <p className="text-sm text-muted-foreground">Categories</p>
+            <p className="text-sm text-muted-foreground mt-2">Categories</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Budget Progress */}
-      <Card className="card-3d">
-        <CardHeader>
-          <CardTitle>Overall Budget Progress</CardTitle>
-          <CardDescription>Your spending across all categories this month</CardDescription>
+      {/* Professional Budget Progress */}
+      <Card className="card-elevated border-0">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold">Overall Budget Progress</CardTitle>
+          <CardDescription className="text-muted-foreground">Your spending across all categories this month</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex justify-between text-sm">
-              <span className="font-medium">Monthly Progress</span>
-              <span className="text-muted-foreground">
+              <span className="font-medium text-foreground">Monthly Progress</span>
+              <span className="text-muted-foreground font-medium">
                 ₹{totalSpent.toLocaleString()} / ₹{totalBudget.toLocaleString()}
               </span>
             </div>
-            <Progress value={overallProgress} className="h-4" />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>{overallProgress.toFixed(1)}% used</span>
-              <span>{Math.max(0, 100 - overallProgress).toFixed(1)}% remaining</span>
+            <Progress 
+              value={overallProgress} 
+              className={`h-3 ${overallProgress >= 90 ? '[&>div]:bg-destructive' : overallProgress >= 75 ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
+            />
+            <div className="flex justify-between text-xs">
+              <span className={`font-medium ${overallProgress >= 90 ? 'text-destructive' : overallProgress >= 75 ? 'text-warning' : 'text-primary'}`}>
+                {overallProgress.toFixed(1)}% used
+              </span>
+              <span className="text-muted-foreground">
+                {Math.max(0, 100 - overallProgress).toFixed(1)}% remaining
+              </span>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Budget Categories */}
+      {/* Professional Budget Categories */}
       <div className="grid gap-6">
         {budgets.map((budget, index) => {
           const IconComponent = budget.icon;
@@ -300,22 +324,29 @@ const BudgetOverview = () => {
           return (
             <Card 
               key={budget.id} 
-              className="card-3d animate-slide-in-up"
+              className="card-elevated border-0 animate-slide-in-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <CardHeader>
+              <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-full ${budget.color}`}>
-                      <IconComponent className="h-6 w-6 text-white" />
+                    <div className={`category-icon ${budget.color}`}>
+                      <IconComponent className="h-6 w-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-xl">{budget.category}</CardTitle>
-                      <CardDescription className="capitalize">{budget.period} budget</CardDescription>
+                      <CardTitle className="text-xl font-semibold">{budget.category}</CardTitle>
+                      <CardDescription className="capitalize text-muted-foreground">{budget.period} budget</CardDescription>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={status.status === "danger" ? "destructive" : status.status === "warning" ? "secondary" : "default"}>
+                    <Badge 
+                      variant={status.status === "danger" ? "destructive" : "outline"} 
+                      className={`${
+                        status.status === "danger" ? 'bg-destructive/10 text-destructive border-destructive/20' : 
+                        status.status === "warning" ? 'bg-warning/10 text-warning border-warning/20' : 
+                        'bg-success/10 text-success border-success/20'
+                      }`}
+                    >
                       <StatusIcon className="h-3 w-3 mr-1" />
                       {status.status === "danger" ? "Over Budget" : status.status === "warning" ? "Almost Full" : "On Track"}
                     </Badge>
@@ -323,12 +354,12 @@ const BudgetOverview = () => {
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-4">
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="font-medium">Spent</span>
-                    <span className="text-muted-foreground">
+              <CardContent className="space-y-6">
+                {/* Professional Progress Section */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-foreground">Spent</span>
+                    <span className="text-sm text-muted-foreground font-medium">
                       ₹{budget.spentAmount.toLocaleString()} / ₹{budget.budgetAmount.toLocaleString()}
                     </span>
                   </div>
@@ -336,46 +367,48 @@ const BudgetOverview = () => {
                     value={progress} 
                     className={`h-3 ${progress >= 100 ? '[&>div]:bg-destructive' : progress >= 75 ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{progress.toFixed(1)}% used</span>
-                    <span>
+                  <div className="flex justify-between text-xs">
+                    <span className={`font-medium ${progress >= 100 ? 'text-destructive' : progress >= 75 ? 'text-warning' : 'text-primary'}`}>
+                      {progress.toFixed(1)}% used
+                    </span>
+                    <span className="text-muted-foreground">
                       {remaining >= 0 ? `₹${remaining.toLocaleString()} remaining` : `₹${Math.abs(remaining).toLocaleString()} over`}
                     </span>
                   </div>
                 </div>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Daily Avg</p>
-                    <p className="text-lg font-semibold text-foreground">
+                {/* Professional Stats Grid */}
+                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/40">
+                  <div className="text-center space-y-1">
+                    <p className="text-xs text-muted-foreground font-medium">Daily Avg</p>
+                    <p className="text-lg font-bold text-foreground">
                       ₹{(budget.spentAmount / 30).toFixed(0)}
                     </p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Recommended Daily</p>
-                    <p className="text-lg font-semibold text-primary">
+                  <div className="text-center space-y-1">
+                    <p className="text-xs text-muted-foreground font-medium">Recommended Daily</p>
+                    <p className="text-lg font-bold text-primary">
                       ₹{(budget.budgetAmount / 30).toFixed(0)}
                     </p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Days Left</p>
-                    <p className="text-lg font-semibold text-muted-foreground">
+                  <div className="text-center space-y-1">
+                    <p className="text-xs text-muted-foreground font-medium">Days Left</p>
+                    <p className="text-lg font-bold text-muted-foreground">
                       {new Date().getDate() > 25 ? new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() - new Date().getDate() : 30 - new Date().getDate()}
                     </p>
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-2 pt-4">
-                  <Button variant="outline" className="btn-3d">
+                {/* Professional Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <Button variant="outline" className="btn-3d border-border/60 hover:bg-muted/50">
                     Add Expense
                   </Button>
-                  <Button variant="outline" className="btn-3d">
+                  <Button variant="outline" className="btn-3d border-border/60 hover:bg-muted/50">
                     Edit Budget
                   </Button>
                   {progress >= 90 && (
-                    <Badge variant="destructive" className="ml-auto">
+                    <Badge variant="destructive" className="ml-auto bg-destructive/10 text-destructive border-destructive/20">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       Budget Alert
                     </Badge>
@@ -387,34 +420,34 @@ const BudgetOverview = () => {
         })}
       </div>
 
-      {/* Budget Tips */}
-      <Card className="card-3d">
-        <CardHeader>
-          <CardTitle>💡 Smart Budget Tips</CardTitle>
+      {/* Professional Budget Tips */}
+      <Card className="card-elevated border-0">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold">💡 Smart Budget Tips</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
-              <h4 className="font-medium text-primary mb-2">50/30/20 Rule</h4>
-              <p className="text-sm text-muted-foreground">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-xl bg-primary/5 border border-primary/10">
+              <h4 className="font-semibold text-primary mb-3 text-lg">50/30/20 Rule</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Allocate 50% for needs, 30% for wants, and 20% for savings and debt repayment.
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-secondary/10 border border-secondary/20">
-              <h4 className="font-medium text-secondary mb-2">Weekly Check-ins</h4>
-              <p className="text-sm text-muted-foreground">
+            <div className="p-6 rounded-xl bg-success/5 border border-success/10">
+              <h4 className="font-semibold text-success mb-3 text-lg">Weekly Check-ins</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Review your spending weekly to stay on track and make adjustments early.
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
-              <h4 className="font-medium text-warning mb-2">Emergency Buffer</h4>
-              <p className="text-sm text-muted-foreground">
+            <div className="p-6 rounded-xl bg-warning/5 border border-warning/10">
+              <h4 className="font-semibold text-warning mb-3 text-lg">Emergency Buffer</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Keep 10-15% buffer in each category for unexpected expenses.
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
-              <h4 className="font-medium text-accent mb-2">Automate Savings</h4>
-              <p className="text-sm text-muted-foreground">
+            <div className="p-6 rounded-xl bg-accent/5 border border-accent/10">
+              <h4 className="font-semibold text-accent mb-3 text-lg">Automate Savings</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Set up automatic transfers to savings when you stay under budget.
               </p>
             </div>

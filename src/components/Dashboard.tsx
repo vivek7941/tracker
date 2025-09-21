@@ -85,11 +85,11 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
   const NavButton = ({ tab, icon: Icon, label }: { tab: string, icon: any, label: string }) => (
     <Button
-      variant={activeTab === tab ? "default" : "ghost"}
-      className={`justify-start gap-3 btn-3d ${
+      variant="ghost"
+      className={`justify-start gap-3 w-full transition-all duration-200 ${
         activeTab === tab 
-          ? 'bg-gradient-primary text-white shadow-glow' 
-          : 'hover:bg-muted'
+          ? 'bg-primary/10 text-primary border-r-2 border-primary font-medium' 
+          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
       }`}
       onClick={() => setActiveTab(tab as any)}
     >
@@ -100,175 +100,202 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-card border-r border-border p-6 space-y-6 animate-slide-in-right">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-primary rounded-lg">
-              <PiggyBank className="h-6 w-6 text-white" />
+      <div className="flex min-h-screen">
+        {/* Professional Sidebar */}
+        <div className="w-72 bg-card/95 border-r border-border/60 backdrop-blur-sm">
+          <div className="p-6 space-y-6 animate-slide-in-right">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-gradient-primary rounded-xl shadow-medium">
+                <PiggyBank className="h-7 w-7 text-white" />
+              </div>
+              <div>
+                <h1 className="font-bold text-xl text-foreground">SmartBudget</h1>
+                <p className="text-xs text-muted-foreground">Personal Finance</p>
+              </div>
             </div>
-            <h1 className="font-bold text-xl">SmartBudget</h1>
-          </div>
 
-          <nav className="space-y-2">
-            <NavButton tab="overview" icon={DollarSign} label="Overview" />
-            <NavButton tab="expenses" icon={CreditCard} label="Expenses" />
-            <NavButton tab="budgets" icon={Target} label="Budgets" />
-            <NavButton tab="goals" icon={PiggyBank} label="Goals" />
-            <NavButton tab="analytics" icon={TrendingUp} label="Analytics" />
-          </nav>
+            <nav className="space-y-1">
+              <NavButton tab="overview" icon={DollarSign} label="Overview" />
+              <NavButton tab="expenses" icon={CreditCard} label="Expenses" />
+              <NavButton tab="budgets" icon={Target} label="Budgets" />
+              <NavButton tab="goals" icon={PiggyBank} label="Goals" />
+              <NavButton tab="analytics" icon={TrendingUp} label="Analytics" />
+            </nav>
 
-          <div className="border-t pt-4 space-y-2">
-            <Button variant="ghost" className="justify-start gap-3 w-full">
-              <Settings className="h-5 w-5" />
-              Settings
-            </Button>
-            <Button 
-              variant="ghost" 
-              className="justify-start gap-3 w-full text-destructive hover:text-destructive"
-              onClick={onLogout}
-            >
-              <LogOut className="h-5 w-5" />
-              Logout
-            </Button>
+            <div className="border-t border-border/60 pt-4 space-y-1">
+              <Button variant="ghost" className="justify-start gap-3 w-full text-muted-foreground hover:text-foreground hover:bg-muted/50">
+                <Settings className="h-5 w-5" />
+                Settings
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="justify-start gap-3 w-full text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                onClick={onLogout}
+              >
+                <LogOut className="h-5 w-5" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8 animate-slide-in-up">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                {activeTab === 'overview' && 'Financial Overview'}
-                {activeTab === 'expenses' && 'Expense Tracker'}
-                {activeTab === 'budgets' && 'Budget Management'}
-                {activeTab === 'goals' && 'Savings Goals'}
-                {activeTab === 'analytics' && 'Financial Analytics'}
-              </h1>
-              <p className="text-muted-foreground">
-                {activeTab === 'overview' && 'Track your financial health at a glance'}
-                {activeTab === 'expenses' && 'Monitor and categorize your spending'}
-                {activeTab === 'budgets' && 'Set and manage category budgets'}
-                {activeTab === 'goals' && 'Achieve your savings targets'}
-                {activeTab === 'analytics' && 'Visualize your financial data and trends'}
-              </p>
+        {/* Professional Main Content */}
+        <div className="flex-1 bg-muted/20">
+          <div className="p-8">
+            {/* Professional Header */}
+            <div className="flex justify-between items-start mb-8 animate-slide-in-up">
+              <div className="space-y-1">
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                  {activeTab === 'overview' && 'Financial Overview'}
+                  {activeTab === 'expenses' && 'Expense Tracker'}
+                  {activeTab === 'budgets' && 'Budget Management'}
+                  {activeTab === 'goals' && 'Savings Goals'}
+                  {activeTab === 'analytics' && 'Financial Analytics'}
+                </h1>
+                <p className="text-muted-foreground text-lg">
+                  {activeTab === 'overview' && 'Track your financial health at a glance'}
+                  {activeTab === 'expenses' && 'Monitor and categorize your spending'}
+                  {activeTab === 'budgets' && 'Set and manage category budgets'}
+                  {activeTab === 'goals' && 'Achieve your savings targets'}
+                  {activeTab === 'analytics' && 'Visualize your financial data and trends'}
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <Button variant="outline" size="icon" className="btn-3d border-border/60">
+                  <Bell className="h-5 w-5 text-muted-foreground" />
+                </Button>
+                <Button variant="outline" size="icon" className="btn-3d border-border/60">
+                  <User className="h-5 w-5 text-muted-foreground" />
+                </Button>
+              </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="icon" className="btn-3d">
-                <Bell className="h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="icon" className="btn-3d">
-                <User className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
 
           {/* Content based on active tab */}
           {activeTab === 'overview' && (
             <div className="space-y-6 animate-scale-in">
-              {/* Stats Cards */}
+              {/* Professional Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="card-3d">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      Total Balance
-                    </CardTitle>
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">
+                        Total Balance
+                      </CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <DollarSign className="h-4 w-4 text-primary" />
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-foreground">
+                  <CardContent className="pt-0">
+                    <div className="text-3xl font-bold text-foreground tracking-tight">
                       ₹{userStats.totalBalance.toLocaleString()}
                     </div>
-                    <p className="text-xs text-success flex items-center gap-1 mt-1">
-                      <TrendingUp className="h-3 w-3" />
-                      +12.5% from last month
-                    </p>
+                    <div className="flex items-center gap-1 mt-2">
+                      <TrendingUp className="h-3 w-3 text-success" />
+                      <span className="text-xs text-success font-medium">+12.5%</span>
+                      <span className="text-xs text-muted-foreground">from last month</span>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="card-3d">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      Monthly Income
-                    </CardTitle>
-                    <TrendingUp className="h-4 w-4 text-success" />
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">
+                        Monthly Income
+                      </CardTitle>
+                      <div className="p-2 bg-success/10 rounded-lg">
+                        <TrendingUp className="h-4 w-4 text-success" />
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-success">
+                  <CardContent className="pt-0">
+                    <div className="text-3xl font-bold text-success tracking-tight">
                       ₹{userStats.monthlyIncome.toLocaleString()}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-2">
                       Salary & side income
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card className="card-3d">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      Monthly Expenses
-                    </CardTitle>
-                    <TrendingDown className="h-4 w-4 text-expense" />
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">
+                        Monthly Expenses
+                      </CardTitle>
+                      <div className="p-2 bg-destructive/10 rounded-lg">
+                        <TrendingDown className="h-4 w-4 text-destructive" />
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-expense">
+                  <CardContent className="pt-0">
+                    <div className="text-3xl font-bold text-expense tracking-tight">
                       ₹{userStats.monthlyExpenses.toLocaleString()}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {Math.round((userStats.monthlyExpenses / userStats.monthlyIncome) * 100)}% of income
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card className="card-3d">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      Savings Progress
-                    </CardTitle>
-                    <Target className="h-4 w-4 text-savings" />
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">
+                        Savings Progress
+                      </CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Target className="h-4 w-4 text-primary" />
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-savings">
+                  <CardContent className="pt-0">
+                    <div className="text-3xl font-bold text-primary tracking-tight">
                       {Math.round((userStats.totalSavings / userStats.savingsGoal) * 100)}%
                     </div>
                     <Progress 
                       value={(userStats.totalSavings / userStats.savingsGoal) * 100} 
-                      className="mt-2"
+                      className="mt-3 h-2"
                     />
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Recent Activity & Budget Overview */}
+              {/* Professional Activity & Budget Cards */}
               <div className="grid lg:grid-cols-2 gap-6">
                 {/* Recent Expenses */}
-                <Card className="card-3d">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      Recent Expenses
-                      <Button size="sm" className="btn-3d">
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl font-semibold">Recent Expenses</CardTitle>
+                      <Button size="sm" className="btn-3d bg-primary text-white hover:bg-primary/90">
                         <Plus className="h-4 w-4 mr-2" />
                         Add
                       </Button>
-                    </CardTitle>
+                    </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {recentExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                        <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-full bg-background ${expense.color}`}>
+                  <CardContent className="space-y-3">
+                    {recentExpenses.map((expense, index) => (
+                      <div 
+                        key={expense.id} 
+                        className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border/40 hover:bg-muted/50 transition-colors"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="category-icon category-food">
                             <expense.icon className="h-4 w-4" />
                           </div>
                           <div>
-                            <p className="font-medium">{expense.description}</p>
+                            <p className="font-medium text-foreground">{expense.description}</p>
                             <p className="text-sm text-muted-foreground">{expense.date}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-expense">-₹{expense.amount}</p>
-                          <Badge variant="outline" className="text-xs">
+                          <p className="font-semibold text-expense text-lg">-₹{expense.amount}</p>
+                          <Badge variant="outline" className="text-xs border-border/40">
                             {expense.category}
                           </Badge>
                         </div>
@@ -278,24 +305,35 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 </Card>
 
                 {/* Budget Overview */}
-                <Card className="card-3d">
-                  <CardHeader>
-                    <CardTitle>Budget Overview</CardTitle>
-                    <CardDescription>This month's spending by category</CardDescription>
+                <Card className="card-elevated border-0">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl font-semibold">Budget Overview</CardTitle>
+                    <CardDescription className="text-muted-foreground">This month's spending by category</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {budgetCategories.map((category) => (
-                      <div key={category.name} className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="font-medium">{category.name}</span>
-                          <span className="text-muted-foreground">
-                            ₹{category.spent} / ₹{category.budget}
+                  <CardContent className="space-y-5">
+                    {budgetCategories.map((category, index) => (
+                      <div 
+                        key={category.name} 
+                        className="space-y-3 animate-slide-in-up"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium text-foreground">{category.name}</span>
+                          <span className="text-sm text-muted-foreground font-medium">
+                            ₹{category.spent.toLocaleString()} / ₹{category.budget.toLocaleString()}
                           </span>
                         </div>
-                        <Progress value={category.percentage} className="h-2" />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{category.percentage}% used</span>
-                          <span>₹{category.budget - category.spent} remaining</span>
+                        <Progress 
+                          value={category.percentage} 
+                          className={`h-2.5 ${category.percentage >= 90 ? '[&>div]:bg-destructive' : category.percentage >= 75 ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
+                        />
+                        <div className="flex justify-between text-xs">
+                          <span className={`font-medium ${category.percentage >= 90 ? 'text-destructive' : category.percentage >= 75 ? 'text-warning' : 'text-primary'}`}>
+                            {category.percentage}% used
+                          </span>
+                          <span className="text-muted-foreground">
+                            ₹{(category.budget - category.spent).toLocaleString()} remaining
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -346,6 +384,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           {activeTab === 'budgets' && <BudgetOverview />}
           {activeTab === 'goals' && <GoalTracker />}
           {activeTab === 'analytics' && <FinancialCharts />}
+          </div>
         </div>
       </div>
     </div>
