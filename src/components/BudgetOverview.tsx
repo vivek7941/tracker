@@ -115,37 +115,28 @@ const BudgetOverview = () => {
   const overallProgress = (totalSpent / totalBudget) * 100;
 
   return (
-    <div className="space-y-8 animate-scale-in bg-muted/20 min-h-screen p-8">
-      {/* Professional Header */}
-      <div className="flex justify-between items-start">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">Budget Management</h2>
-          <div className="flex items-center gap-4">
-            <p className="text-muted-foreground text-lg">
-              Overall Budget Usage: <span className="font-semibold text-primary">{overallProgress.toFixed(1)}%</span>
-            </p>
-            <div className={`px-3 py-1 text-sm font-medium rounded-full ${
-              overallProgress >= 90 ? 'bg-destructive/10 text-destructive' : 
-              overallProgress >= 75 ? 'bg-warning/10 text-warning' : 
-              'bg-success/10 text-success'
-            }`}>
-              {overallProgress >= 90 ? 'Over Budget' : overallProgress >= 75 ? 'Warning' : 'On Track'}
-            </div>
-          </div>
+    <div className="space-y-6 bg-muted/20 min-h-screen p-6">
+      {/* Simple Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Budget Management</h2>
+          <p className="text-muted-foreground">
+            Budget Usage: {overallProgress.toFixed(1)}%
+          </p>
         </div>
         
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="btn-3d bg-primary text-white hover:bg-primary/90 shadow-md">
+            <Button className="bg-primary text-white">
               <Plus className="h-4 w-4 mr-2" />
               Add Budget
             </Button>
           </DialogTrigger>
-          <DialogContent className="card-elevated border-0">
-            <DialogHeader className="space-y-3">
-              <DialogTitle className="text-2xl font-semibold">Create New Budget</DialogTitle>
-              <DialogDescription className="text-base text-muted-foreground">
-                Set spending limits for different categories.
+          <DialogContent className="simple-card">
+            <DialogHeader>
+              <DialogTitle>Create New Budget</DialogTitle>
+              <DialogDescription>
+                Set spending limits for categories.
               </DialogDescription>
             </DialogHeader>
             
@@ -209,75 +200,55 @@ const BudgetOverview = () => {
         </Dialog>
       </div>
 
-      {/* Professional Budget Summary Cards */}
-      <div className="grid md:grid-cols-4 gap-6">
-        <Card className="card-elevated border-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium text-muted-foreground">Total Budget</CardTitle>
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <DollarSign className="h-4 w-4 text-primary" />
-              </div>
-            </div>
+      {/* Simple Summary Cards */}
+      <div className="grid md:grid-cols-4 gap-4">
+        <Card className="simple-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">Total Budget</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground tracking-tight">
+            <div className="text-2xl font-bold">
               ₹{totalBudget.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">This month</p>
+            <p className="text-sm text-muted-foreground">This month</p>
           </CardContent>
         </Card>
 
-        <Card className="card-elevated border-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium text-muted-foreground">Total Spent</CardTitle>
-              <div className="p-2 bg-destructive/10 rounded-lg">
-                <TrendingUp className="h-4 w-4 text-destructive" />
-              </div>
-            </div>
+        <Card className="simple-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">Total Spent</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-expense tracking-tight">
+            <div className="text-2xl font-bold text-expense">
               ₹{totalSpent.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground">
               {overallProgress.toFixed(1)}% of budget
             </p>
           </CardContent>
         </Card>
 
-        <Card className="card-elevated border-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium text-muted-foreground">Remaining</CardTitle>
-              <div className="p-2 bg-success/10 rounded-lg">
-                <CheckCircle className="h-4 w-4 text-success" />
-              </div>
-            </div>
+        <Card className="simple-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">Remaining</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-success tracking-tight">
+            <div className="text-2xl font-bold text-success">
               ₹{remainingBudget.toLocaleString()}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">Available to spend</p>
+            <p className="text-sm text-muted-foreground">Available</p>
           </CardContent>
         </Card>
 
-        <Card className="card-elevated border-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium text-muted-foreground">Over Budget</CardTitle>
-              <div className="p-2 bg-warning/10 rounded-lg">
-                <AlertTriangle className="h-4 w-4 text-warning" />
-              </div>
-            </div>
+        <Card className="simple-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">Over Budget</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-warning tracking-tight">
+            <div className="text-2xl font-bold text-warning">
               {budgets.filter(b => (b.spentAmount / b.budgetAmount) > 1).length}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">Categories</p>
+            <p className="text-sm text-muted-foreground">Categories</p>
           </CardContent>
         </Card>
       </div>
