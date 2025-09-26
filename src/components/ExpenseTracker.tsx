@@ -11,11 +11,9 @@ import { Plus, Search, Filter, Calendar, ShoppingCart, Car, Home, Coffee, Plane,
 
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([
-    { id: 1, description: "Grocery Shopping", amount: 125.50, category: "Food", date: "2024-01-15", icon: ShoppingCart },
-    { id: 2, description: "Gas Fill Up", amount: 45.00, category: "Transport", date: "2024-01-14", icon: Car },
-    { id: 3, description: "Electric Bill", amount: 89.30, category: "Utilities", date: "2024-01-13", icon: Home },
-    { id: 4, description: "Coffee Meeting", amount: 12.75, category: "Food", date: "2024-01-12", icon: Coffee },
-    { id: 5, description: "Movie Tickets", amount: 28.00, category: "Entertainment", date: "2024-01-11", icon: Gamepad2 },
+    { id: 1, description: "Grocery Shopping", amount: 85.50, category: "Food", date: "2024-01-15", icon: ShoppingCart },
+    { id: 2, description: "Bus Pass", amount: 25.00, category: "Transport", date: "2024-01-14", icon: Car },
+    { id: 3, description: "Coffee", amount: 5.75, category: "Food", date: "2024-01-12", icon: Coffee },
   ]);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -279,11 +277,9 @@ const ExpenseTracker = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-3xl font-bold text-expense">₹67.25</p>
+              <p className="text-3xl font-bold text-expense">₹25.00</p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>3 transactions</span>
-                <span>•</span>
-                <span className="text-success">↓ 15% vs yesterday</span>
+                <span>1 transaction</span>
               </div>
             </div>
           </CardContent>
@@ -295,9 +291,9 @@ const ExpenseTracker = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-3xl font-bold text-primary">₹215.80</p>
+              <p className="text-3xl font-bold text-primary">₹38.75</p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="text-success">↓ 12% from last week</span>
+                <span>Daily average</span>
               </div>
             </div>
           </CardContent>
@@ -311,7 +307,7 @@ const ExpenseTracker = () => {
             <div className="space-y-2">
               <p className="text-3xl font-bold text-foreground">Food</p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>42% of total spending</span>
+                <span>78% of spending</span>
               </div>
             </div>
           </CardContent>

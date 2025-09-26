@@ -6,38 +6,27 @@ import { TrendingUp, TrendingDown, DollarSign, Target } from "lucide-react";
 const FinancialCharts = () => {
   // Mock data for charts
   const expenseByCategory = [
-    { name: 'Food & Dining', value: 850, color: '#f97316' },
-    { name: 'Transportation', value: 320, color: '#3b82f6' },
-    { name: 'Utilities', value: 240, color: '#10b981' },
-    { name: 'Entertainment', value: 150, color: '#8b5cf6' },
-    { name: 'Healthcare', value: 200, color: '#ef4444' },
-    { name: 'Shopping', value: 180, color: '#ec4899' }
+    { name: 'Food', value: 120, color: '#f97316' },
+    { name: 'Transport', value: 40, color: '#3b82f6' },
+    { name: 'Entertainment', value: 30, color: '#8b5cf6' }
   ];
 
   const monthlyTrends = [
-    { month: 'Oct', income: 4500, expenses: 3200, savings: 1300 },
-    { month: 'Nov', income: 4500, expenses: 3100, savings: 1400 },
-    { month: 'Dec', income: 4800, expenses: 3400, savings: 1400 },
-    { month: 'Jan', income: 4500, expenses: 3250, savings: 1250 },
-    { month: 'Feb', income: 4600, expenses: 3100, savings: 1500 },
-    { month: 'Mar', income: 4500, expenses: 2900, savings: 1600 }
+    { month: 'Jan', income: 500, expenses: 190, savings: 310 },
+    { month: 'Feb', income: 500, expenses: 220, savings: 280 },
+    { month: 'Mar', income: 500, expenses: 180, savings: 320 }
   ];
 
   const budgetVsSpending = [
-    { category: 'Food', budget: 800, spent: 650 },
-    { category: 'Transport', budget: 300, spent: 280 },
-    { category: 'Utilities', budget: 200, spent: 185 },
-    { category: 'Entertainment', budget: 250, spent: 120 },
-    { category: 'Shopping', budget: 300, spent: 240 }
+    { category: 'Food', budget: 150, spent: 120 },
+    { category: 'Transport', budget: 50, spent: 40 },
+    { category: 'Entertainment', budget: 80, spent: 30 }
   ];
 
   const savingsProgress = [
-    { month: 'Oct', target: 1200, actual: 1300 },
-    { month: 'Nov', target: 1200, actual: 1400 },
-    { month: 'Dec', target: 1200, actual: 1400 },
-    { month: 'Jan', target: 1200, actual: 1250 },
-    { month: 'Feb', target: 1200, actual: 1500 },
-    { month: 'Mar', target: 1200, actual: 1600 }
+    { month: 'Jan', target: 200, actual: 310 },
+    { month: 'Feb', target: 200, actual: 280 },
+    { month: 'Mar', target: 200, actual: 320 }
   ];
 
   const COLORS = ['#f97316', '#3b82f6', '#10b981', '#8b5cf6', '#ef4444', '#ec4899'];
@@ -212,15 +201,15 @@ const FinancialCharts = () => {
                 <TrendingUp className="h-4 w-4 text-success" />
                 <span className="text-sm font-medium">Avg. Monthly</span>
               </div>
-              <p className="text-xl font-bold text-success">₹1,408</p>
-              <p className="text-xs text-muted-foreground">17% above target</p>
+              <p className="text-xl font-bold text-success">₹303</p>
+              <p className="text-xs text-muted-foreground">52% above target</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Target className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">Best Month</span>
               </div>
-              <p className="text-xl font-bold text-primary">₹1,600</p>
+              <p className="text-xl font-bold text-primary">₹320</p>
               <p className="text-xs text-muted-foreground">March 2024</p>
             </div>
             <div className="text-center">
@@ -228,8 +217,8 @@ const FinancialCharts = () => {
                 <TrendingDown className="h-4 w-4 text-warning" />
                 <span className="text-sm font-medium">Needs Attention</span>
               </div>
-              <p className="text-xl font-bold text-warning">January</p>
-              <p className="text-xs text-muted-foreground">Below target</p>
+              <p className="text-xl font-bold text-warning">February</p>
+              <p className="text-xs text-muted-foreground">Lowest savings</p>
             </div>
           </div>
         </CardContent>

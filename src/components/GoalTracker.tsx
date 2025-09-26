@@ -14,51 +14,27 @@ const GoalTracker = () => {
   const [goals, setGoals] = useState([
     {
       id: 1,
-      name: "Emergency Fund",
-      description: "6 months of expenses saved",
-      targetAmount: 15000,
-      currentAmount: 8500,
-      deadline: "2024-12-31",
-      category: "Emergency",
-      icon: Heart,
-      color: "bg-red-500",
-      monthlyContribution: 500
-    },
-    {
-      id: 2,
-      name: "Japan Vacation",
-      description: "2-week trip to Tokyo and Kyoto",
-      targetAmount: 5000,
-      currentAmount: 2800,
+      name: "New Laptop",
+      description: "For college projects",
+      targetAmount: 800,
+      currentAmount: 320,
       deadline: "2024-08-15",
-      category: "Travel",
-      icon: Plane,
-      color: "bg-blue-500",
-      monthlyContribution: 400
-    },
-    {
-      id: 3,
-      name: "New MacBook Pro",
-      description: "Latest M3 MacBook for work",
-      targetAmount: 2500,
-      currentAmount: 1200,
-      deadline: "2024-05-30",
       category: "Tech",
       icon: Laptop,
       color: "bg-purple-500",
-      monthlyContribution: 300
+      monthlyContribution: 100
     },
     {
-      id: 4,
-      name: "House Down Payment",
-      description: "20% down payment for first home",
-      targetAmount: 50000,
-      currentAmount: 12000,
-      deadline: "2025-12-31",
-      category: "Housing",
-      icon: Home,
-      color: "bg-green-500",
-      monthlyContribution: 1500
+      id: 2,
+      name: "Trip Home",
+      description: "Visit family during holidays",
+      targetAmount: 300,
+      currentAmount: 150,
+      deadline: "2024-12-20",
+      category: "Travel",
+      icon: Plane,
+      color: "bg-blue-500",
+      monthlyContribution: 50
     }
   ]);
 
