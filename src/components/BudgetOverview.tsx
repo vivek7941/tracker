@@ -7,53 +7,35 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, AlertTriangle, CheckCircle, TrendingUp, DollarSign, ShoppingCart, Car, Home, Coffee, Plane, Gamepad2, Heart, BookOpen } from "lucide-react";
+import { Plus, AlertTriangle, CheckCircle, ShoppingCart, Car, Gamepad2, Coffee } from "lucide-react";
 
 const BudgetOverview = () => {
   const [budgets, setBudgets] = useState([
     {
       id: 1,
-      category: "Food & Dining",
-      budgetAmount: 800,
-      spentAmount: 650,
+      category: "Food",
+      budgetAmount: 150,
+      spentAmount: 120,
       icon: ShoppingCart,
       color: "bg-orange-500",
       period: "monthly"
     },
     {
       id: 2,
-      category: "Transportation",
-      budgetAmount: 300,
-      spentAmount: 280,
+      category: "Transport",
+      budgetAmount: 50,
+      spentAmount: 40,
       icon: Car,
       color: "bg-blue-500",
       period: "monthly"
     },
     {
       id: 3,
-      category: "Utilities",
-      budgetAmount: 200,
-      spentAmount: 185,
-      icon: Home,
-      color: "bg-green-500",
-      period: "monthly"
-    },
-    {
-      id: 4,
       category: "Entertainment",
-      budgetAmount: 250,
-      spentAmount: 120,
+      budgetAmount: 80,
+      spentAmount: 30,
       icon: Gamepad2,
       color: "bg-purple-500",
-      period: "monthly"
-    },
-    {
-      id: 5,
-      category: "Healthcare",
-      budgetAmount: 150,
-      spentAmount: 75,
-      icon: Heart,
-      color: "bg-red-500",
       period: "monthly"
     }
   ]);
@@ -65,27 +47,23 @@ const BudgetOverview = () => {
     period: "monthly"
   });
 
-  const budgetCategories = [
-    { name: "Food & Dining", icon: ShoppingCart, color: "category-food" },
-    { name: "Transportation", icon: Car, color: "category-transport" },
-    { name: "Utilities", icon: Home, color: "category-utilities" },
+  const categories = [
+    { name: "Food", icon: ShoppingCart, color: "category-food" },
+    { name: "Transport", icon: Car, color: "category-transport" },
     { name: "Entertainment", icon: Gamepad2, color: "category-entertainment" },
-    { name: "Healthcare", icon: Heart, color: "category-healthcare" },
-    { name: "Education", icon: BookOpen, color: "category-education" },
-    { name: "Travel", icon: Plane, color: "category-travel" },
-    { name: "Shopping", icon: Coffee, color: "category-shopping" },
+    { name: "Other", icon: Coffee, color: "category-shopping" },
   ];
 
-  const handleAddBudget = () => {
+  const addNewBudget = () => {
     if (newBudget.category && newBudget.budgetAmount) {
-      const categoryData = budgetCategories.find(cat => cat.name === newBudget.category);
+      const cat = categories.find(c => c.name === newBudget.category);
       const budget = {
         id: Date.now(),
         category: newBudget.category,
         budgetAmount: parseFloat(newBudget.budgetAmount),
         spentAmount: 0,
-        icon: categoryData?.icon || ShoppingCart,
-        color: categoryData?.color || "category-shopping",
+        icon: cat?.icon || ShoppingCart,
+        color: cat?.color || "category-shopping",
         period: newBudget.period
       };
       setBudgets([...budgets, budget]);
@@ -98,61 +76,61 @@ const BudgetOverview = () => {
     }
   };
 
-  const calculateProgress = (spent: number, budget: number) => {
+  const getProgress = (spent, budget) => {
     return Math.min((spent / budget) * 100, 100);
   };
 
-  const getBudgetStatus = (spent: number, budget: number) => {
-    const percentage = (spent / budget) * 100;
-    if (percentage >= 90) return { status: "danger", color: "text-destructive", icon: AlertTriangle };
-    if (percentage >= 75) return { status: "warning", color: "text-warning", icon: AlertTriangle };
-    return { status: "good", color: "text-success", icon: CheckCircle };
+  const getStatus = (spent, budget) => {
+    const pct = (spent / budget) * 100;
+    if (pct >= 90) return { status: "danger", color: "text-red-500", icon: AlertTriangle };
+    if (pct >= 75) return { status: "warning", color: "text-yellow-500", icon: AlertTriangle };
+    return { status: "good", color: "text-green-500", icon: CheckCircle };
   };
 
-  const totalBudget = budgets.reduce((sum, budget) => sum + budget.budgetAmount, 0);
-  const totalSpent = budgets.reduce((sum, budget) => sum + budget.spentAmount, 0);
-  const remainingBudget = totalBudget - totalSpent;
-  const overallProgress = (totalSpent / totalBudget) * 100;
+  const totalBudget = budgets.reduce((sum, b) => sum + b.budgetAmount, 0);
+  const totalSpent = budgets.reduce((sum, b) => sum + b.spentAmount, 0);
+  const remaining = totalBudget - totalSpent;
+  const progress = (totalSpent / totalBudget) * 100;
 
   return (
-    <div className="space-y-6 bg-muted/20 min-h-screen p-6">
-      {/* Simple Header */}
+    <div className="space-y-6 p-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">Budget Management</h2>
+          <h2 className="text-2xl font-bold">Budgets</h2>
           <p className="text-muted-foreground">
-            Budget Usage: {overallProgress.toFixed(1)}%
+            Used: {progress.toFixed(1)}%
           </p>
         </div>
         
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-primary text-white">
+            <Button>
               <Plus className="h-4 w-4 mr-2" />
               Add Budget
             </Button>
           </DialogTrigger>
-          <DialogContent className="simple-card">
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create New Budget</DialogTitle>
+              <DialogTitle>New Budget</DialogTitle>
               <DialogDescription>
-                Set spending limits for categories.
+                Set spending limit for category
               </DialogDescription>
             </DialogHeader>
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="budget-category">Category</Label>
+                <Label>Category</Label>
                 <Select value={newBudget.category} onValueChange={(value) => setNewBudget({...newBudget, category: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
+                    <SelectValue placeholder="Pick category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {budgetCategories.map((category) => (
-                      <SelectItem key={category.name} value={category.name}>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.name} value={cat.name}>
                         <div className="flex items-center gap-2">
-                          <category.icon className="h-4 w-4" />
-                          {category.name}
+                          <cat.icon className="h-4 w-4" />
+                          {cat.name}
                         </div>
                       </SelectItem>
                     ))}
@@ -160,271 +138,113 @@ const BudgetOverview = () => {
                 </Select>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="budget-amount">Budget Amount (₹)</Label>
-                  <Input
-                    id="budget-amount"
-                    type="number"
-                    placeholder="500"
-                    value={newBudget.budgetAmount}
-                    onChange={(e) => setNewBudget({...newBudget, budgetAmount: e.target.value})}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="budget-period">Period</Label>
-                  <Select value={newBudget.period} onValueChange={(value) => setNewBudget({...newBudget, period: value})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label>Amount (₹)</Label>
+                <Input
+                  type="number"
+                  placeholder="100"
+                  value={newBudget.budgetAmount}
+                  onChange={(e) => setNewBudget({...newBudget, budgetAmount: e.target.value})}
+                />
               </div>
             </div>
             
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="border-border/60">
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddBudget} className="bg-primary text-white hover:bg-primary/90">
-                Create Budget
+              <Button onClick={addNewBudget}>
+                Create
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Simple Summary Cards */}
-      <div className="grid md:grid-cols-4 gap-4">
-        <Card className="simple-card">
+      {/* Summary */}
+      <div className="grid md:grid-cols-3 gap-4">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Total Budget</CardTitle>
+            <CardTitle className="text-sm">Total Budget</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              ₹{totalBudget.toLocaleString()}
-            </div>
+            <div className="text-2xl font-bold">₹{totalBudget}</div>
             <p className="text-sm text-muted-foreground">This month</p>
           </CardContent>
         </Card>
 
-        <Card className="simple-card">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Total Spent</CardTitle>
+            <CardTitle className="text-sm">Spent</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-expense">
-              ₹{totalSpent.toLocaleString()}
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {overallProgress.toFixed(1)}% of budget
-            </p>
+            <div className="text-2xl font-bold text-red-600">₹{totalSpent}</div>
+            <p className="text-sm text-muted-foreground">{progress.toFixed(1)}% used</p>
           </CardContent>
         </Card>
 
-        <Card className="simple-card">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Remaining</CardTitle>
+            <CardTitle className="text-sm">Left</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">
-              ₹{remainingBudget.toLocaleString()}
-            </div>
+            <div className="text-2xl font-bold text-green-600">₹{remaining}</div>
             <p className="text-sm text-muted-foreground">Available</p>
-          </CardContent>
-        </Card>
-
-        <Card className="simple-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Over Budget</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-warning">
-              {budgets.filter(b => (b.spentAmount / b.budgetAmount) > 1).length}
-            </div>
-            <p className="text-sm text-muted-foreground">Categories</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Professional Budget Progress */}
-      <Card className="card-elevated border-0">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-semibold">Overall Budget Progress</CardTitle>
-          <CardDescription className="text-muted-foreground">Your spending across all categories this month</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex justify-between text-sm">
-              <span className="font-medium text-foreground">Monthly Progress</span>
-              <span className="text-muted-foreground font-medium">
-                ₹{totalSpent.toLocaleString()} / ₹{totalBudget.toLocaleString()}
-              </span>
-            </div>
-            <Progress 
-              value={overallProgress} 
-              className={`h-3 ${overallProgress >= 90 ? '[&>div]:bg-destructive' : overallProgress >= 75 ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
-            />
-            <div className="flex justify-between text-xs">
-              <span className={`font-medium ${overallProgress >= 90 ? 'text-destructive' : overallProgress >= 75 ? 'text-warning' : 'text-primary'}`}>
-                {overallProgress.toFixed(1)}% used
-              </span>
-              <span className="text-muted-foreground">
-                {Math.max(0, 100 - overallProgress).toFixed(1)}% remaining
-              </span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Professional Budget Categories */}
-      <div className="grid gap-6">
-        {budgets.map((budget, index) => {
-          const IconComponent = budget.icon;
-          const progress = calculateProgress(budget.spentAmount, budget.budgetAmount);
-          const status = getBudgetStatus(budget.spentAmount, budget.budgetAmount);
+      {/* Budget List */}
+      <div className="space-y-4">
+        {budgets.map((budget) => {
+          const Icon = budget.icon;
+          const prog = getProgress(budget.spentAmount, budget.budgetAmount);
+          const status = getStatus(budget.spentAmount, budget.budgetAmount);
           const StatusIcon = status.icon;
-          const remaining = budget.budgetAmount - budget.spentAmount;
+          const left = budget.budgetAmount - budget.spentAmount;
 
           return (
-            <Card 
-              key={budget.id} 
-              className="card-elevated border-0 animate-slide-in-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardHeader className="pb-4">
+            <Card key={budget.id}>
+              <CardHeader>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className={`category-icon ${budget.color}`}>
-                      <IconComponent className="h-6 w-6" />
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded ${budget.color}`}>
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <CardTitle className="text-xl font-semibold">{budget.category}</CardTitle>
-                      <CardDescription className="capitalize text-muted-foreground">{budget.period} budget</CardDescription>
+                      <CardTitle className="text-lg">{budget.category}</CardTitle>
+                      <CardDescription>Monthly budget</CardDescription>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={status.status === "danger" ? "destructive" : "outline"} 
-                      className={`${
-                        status.status === "danger" ? 'bg-destructive/10 text-destructive border-destructive/20' : 
-                        status.status === "warning" ? 'bg-warning/10 text-warning border-warning/20' : 
-                        'bg-success/10 text-success border-success/20'
-                      }`}
-                    >
-                      <StatusIcon className="h-3 w-3 mr-1" />
-                      {status.status === "danger" ? "Over Budget" : status.status === "warning" ? "Almost Full" : "On Track"}
-                    </Badge>
-                  </div>
+                  <Badge variant={status.status === "danger" ? "destructive" : "outline"}>
+                    <StatusIcon className="h-3 w-3 mr-1" />
+                    {status.status === "danger" ? "Over" : status.status === "warning" ? "Close" : "Good"}
+                  </Badge>
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-6">
-                {/* Professional Progress Section */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold text-foreground">Spent</span>
-                    <span className="text-sm text-muted-foreground font-medium">
-                      ₹{budget.spentAmount.toLocaleString()} / ₹{budget.budgetAmount.toLocaleString()}
-                    </span>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Spent</span>
+                    <span>₹{budget.spentAmount} / ₹{budget.budgetAmount}</span>
                   </div>
-                  <Progress 
-                    value={progress} 
-                    className={`h-3 ${progress >= 100 ? '[&>div]:bg-destructive' : progress >= 75 ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
-                  />
-                  <div className="flex justify-between text-xs">
-                    <span className={`font-medium ${progress >= 100 ? 'text-destructive' : progress >= 75 ? 'text-warning' : 'text-primary'}`}>
-                      {progress.toFixed(1)}% used
-                    </span>
-                    <span className="text-muted-foreground">
-                      {remaining >= 0 ? `₹${remaining.toLocaleString()} remaining` : `₹${Math.abs(remaining).toLocaleString()} over`}
-                    </span>
+                  <Progress value={prog} className="h-2" />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>{prog.toFixed(1)}% used</span>
+                    <span>{left >= 0 ? `₹${left} left` : `₹${Math.abs(left)} over`}</span>
                   </div>
                 </div>
 
-                {/* Professional Stats Grid */}
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/40">
-                  <div className="text-center space-y-1">
-                    <p className="text-xs text-muted-foreground font-medium">Daily Avg</p>
-                    <p className="text-lg font-bold text-foreground">
-                      ₹{(budget.spentAmount / 30).toFixed(0)}
-                    </p>
-                  </div>
-                  <div className="text-center space-y-1">
-                    <p className="text-xs text-muted-foreground font-medium">Recommended Daily</p>
-                    <p className="text-lg font-bold text-primary">
-                      ₹{(budget.budgetAmount / 30).toFixed(0)}
-                    </p>
-                  </div>
-                  <div className="text-center space-y-1">
-                    <p className="text-xs text-muted-foreground font-medium">Days Left</p>
-                    <p className="text-lg font-bold text-muted-foreground">
-                      {new Date().getDate() > 25 ? new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() - new Date().getDate() : 30 - new Date().getDate()}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Professional Action Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <Button variant="outline" className="btn-3d border-border/60 hover:bg-muted/50">
-                    Add Expense
-                  </Button>
-                  <Button variant="outline" className="btn-3d border-border/60 hover:bg-muted/50">
-                    Edit Budget
-                  </Button>
-                  {progress >= 90 && (
-                    <Badge variant="destructive" className="ml-auto bg-destructive/10 text-destructive border-destructive/20">
-                      <AlertTriangle className="h-3 w-3 mr-1" />
-                      Budget Alert
-                    </Badge>
-                  )}
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">Add Expense</Button>
+                  <Button variant="outline" size="sm">Edit</Button>
                 </div>
               </CardContent>
             </Card>
           );
         })}
       </div>
-
-      {/* Professional Budget Tips */}
-      <Card className="card-elevated border-0">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-semibold">💡 Smart Budget Tips</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-xl bg-primary/5 border border-primary/10">
-              <h4 className="font-semibold text-primary mb-3 text-lg">50/30/20 Rule</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Allocate 50% for needs, 30% for wants, and 20% for savings and debt repayment.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-success/5 border border-success/10">
-              <h4 className="font-semibold text-success mb-3 text-lg">Weekly Check-ins</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Review your spending weekly to stay on track and make adjustments early.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-warning/5 border border-warning/10">
-              <h4 className="font-semibold text-warning mb-3 text-lg">Emergency Buffer</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Keep 10-15% buffer in each category for unexpected expenses.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-accent/5 border border-accent/10">
-              <h4 className="font-semibold text-accent mb-3 text-lg">Automate Savings</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Set up automatic transfers to savings when you stay under budget.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
