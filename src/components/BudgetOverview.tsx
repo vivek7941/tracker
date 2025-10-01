@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,35 +12,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, AlertTriangle, CheckCircle, ShoppingCart, Car, Gamepad2, Coffee } from "lucide-react";
 
 const BudgetOverview = () => {
-  const [budgets, setBudgets] = useState([
-    {
-      id: 1,
-      category: "Food",
-      budgetAmount: 150,
-      spentAmount: 120,
-      icon: ShoppingCart,
-      color: "bg-orange-500",
-      period: "monthly"
-    },
-    {
-      id: 2,
-      category: "Transport",
-      budgetAmount: 50,
-      spentAmount: 40,
-      icon: Car,
-      color: "bg-blue-500",
-      period: "monthly"
-    },
-    {
-      id: 3,
-      category: "Entertainment",
-      budgetAmount: 80,
-      spentAmount: 30,
-      icon: Gamepad2,
-      color: "bg-purple-500",
-      period: "monthly"
+  const [budgets, setBudgets] = useState([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchBudgets();
+  }, []);
+
+  const fetchBudgets = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('budgets')
+      .select('*')
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load budgets",
+        variant: "destructive",
+      });
+    } else {
+      setBudgets(data || []);
     }
-  ]);
+  };
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newBudget, setNewBudget] = useState({
@@ -54,25 +53,40 @@ const BudgetOverview = () => {
     { name: "Other", icon: Coffee, color: "category-shopping" },
   ];
 
-  const addNewBudget = () => {
+  const addNewBudget = async () => {
     if (newBudget.category && newBudget.budgetAmount) {
-      const cat = categories.find(c => c.name === newBudget.category);
-      const budget = {
-        id: Date.now(),
-        category: newBudget.category,
-        budgetAmount: parseFloat(newBudget.budgetAmount),
-        spentAmount: 0,
-        icon: cat?.icon || ShoppingCart,
-        color: cat?.color || "category-shopping",
-        period: newBudget.period
-      };
-      setBudgets([...budgets, budget]);
-      setNewBudget({
-        category: "",
-        budgetAmount: "",
-        period: "monthly"
-      });
-      setIsAddDialogOpen(false);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('budgets')
+        .insert([{
+          user_id: user.id,
+          category: newBudget.category,
+          budget_amount: parseFloat(newBudget.budgetAmount),
+          spent_amount: 0,
+          period: newBudget.period
+        }]);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to add budget",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: "Budget created",
+        });
+        fetchBudgets();
+        setNewBudget({
+          category: "",
+          budgetAmount: "",
+          period: "monthly"
+        });
+        setIsAddDialogOpen(false);
+      }
     }
   };
 
@@ -87,10 +101,20 @@ const BudgetOverview = () => {
     return { status: "good", color: "text-green-500", icon: CheckCircle };
   };
 
-  const totalBudget = budgets.reduce((sum, b) => sum + b.budgetAmount, 0);
-  const totalSpent = budgets.reduce((sum, b) => sum + b.spentAmount, 0);
+  const getCategoryIcon = (categoryName: string) => {
+    const category = categories.find(c => c.name === categoryName);
+    return category?.icon || ShoppingCart;
+  };
+
+  const getCategoryColor = (categoryName: string) => {
+    const category = categories.find(c => c.name === categoryName);
+    return category?.color || "category-shopping";
+  };
+
+  const totalBudget = budgets.reduce((sum, b) => sum + Number(b.budget_amount || 0), 0);
+  const totalSpent = budgets.reduce((sum, b) => sum + Number(b.spent_amount || 0), 0);
   const remaining = totalBudget - totalSpent;
-  const progress = (totalSpent / totalBudget) * 100;
+  const progress = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
   return (
     <div className="space-y-6 p-6">
@@ -197,18 +221,18 @@ const BudgetOverview = () => {
       {/* Budget List */}
       <div className="space-y-4">
         {budgets.map((budget) => {
-          const Icon = budget.icon;
-          const prog = getProgress(budget.spentAmount, budget.budgetAmount);
-          const status = getStatus(budget.spentAmount, budget.budgetAmount);
+          const Icon = getCategoryIcon(budget.category);
+          const prog = getProgress(Number(budget.spent_amount), Number(budget.budget_amount));
+          const status = getStatus(Number(budget.spent_amount), Number(budget.budget_amount));
           const StatusIcon = status.icon;
-          const left = budget.budgetAmount - budget.spentAmount;
+          const left = Number(budget.budget_amount) - Number(budget.spent_amount);
 
           return (
             <Card key={budget.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded ${budget.color}`}>
+                    <div className={`p-2 rounded ${getCategoryColor(budget.category)}`}>
                       <Icon className="h-5 w-5 text-white" />
                     </div>
                     <div>
@@ -227,7 +251,7 @@ const BudgetOverview = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Spent</span>
-                    <span>₹{budget.spentAmount} / ₹{budget.budgetAmount}</span>
+                    <span>₹{budget.spent_amount} / ₹{budget.budget_amount}</span>
                   </div>
                   <Progress value={prog} className="h-2" />
                   <div className="flex justify-between text-xs text-muted-foreground">
@@ -244,6 +268,14 @@ const BudgetOverview = () => {
             </Card>
           );
         })}
+        
+        {budgets.length === 0 && (
+          <Card>
+            <CardContent className="text-center py-8 text-muted-foreground">
+              No budgets yet. Create your first budget!
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
