@@ -49,6 +49,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
+        data: {
+          full_name: name,
+        },
       },
     });
 
