@@ -60,30 +60,30 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const NavButton = ({ tab, icon: Icon, label }: { tab: string, icon: any, label: string }) => (
     <Button
       variant="ghost"
-      className={`justify-start gap-2 w-full ${
+      className={`justify-start gap-2 w-full transition-all duration-300 ${
         activeTab === tab 
-          ? 'bg-primary/10 text-primary' 
-          : 'text-muted-foreground hover:text-foreground'
+          ? 'bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-md transform scale-105' 
+          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:translate-x-1'
       }`}
       onClick={() => setActiveTab(tab as any)}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className={`h-4 w-4 transition-transform duration-300 ${activeTab === tab ? 'scale-110' : ''}`} />
       {label}
     </Button>
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="flex min-h-screen">
         {/* sidebar */}
-        <div className="w-60 bg-card border-r">
+        <div className="w-60 glass-effect border-r backdrop-blur-xl shadow-lg">
           <div className="p-4 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-primary rounded">
+              <div className="p-2 bg-gradient-to-br from-primary to-primary/80 rounded-lg shadow-lg pulse-glow">
                 <PiggyBank className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="font-bold">SmartBudget</h1>
+                <h1 className="font-bold gradient-text text-lg">SmartBudget</h1>
                 <p className="text-xs text-muted-foreground">Budget App</p>
               </div>
             </div>
@@ -125,74 +125,87 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* main stats */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="stat-card border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <DollarSign className="h-4 w-4" />
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <DollarSign className="h-4 w-4 text-primary" />
+                      </div>
                       Balance
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">₹{stats.balance}</div>
+                    <div className="text-3xl font-bold gradient-text">₹{stats.balance}</div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="stat-card border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
+                      <div className="p-2 bg-income/10 rounded-lg">
+                        <TrendingUp className="h-4 w-4 text-income" />
+                      </div>
                       Income
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-green-600">₹{stats.income}</div>
+                    <div className="text-3xl font-bold text-income">₹{stats.income}</div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="stat-card border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <TrendingDown className="h-4 w-4" />
+                      <div className="p-2 bg-expense/10 rounded-lg">
+                        <TrendingDown className="h-4 w-4 text-expense" />
+                      </div>
                       Expenses
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-red-600">₹{stats.expenses}</div>
+                    <div className="text-3xl font-bold text-expense">₹{stats.expenses}</div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="stat-card border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <Target className="h-4 w-4" />
+                      <div className="p-2 bg-savings/10 rounded-lg">
+                        <Target className="h-4 w-4 text-savings" />
+                      </div>
                       Savings
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">₹{stats.savings}</div>
+                    <div className="text-3xl font-bold text-savings">₹{stats.savings}</div>
                   </CardContent>
                 </Card>
               </div>
 
               {/* recent stuff */}
               <div className="grid lg:grid-cols-2 gap-6">
-                <Card>
+                <Card className="card-3d border-0 shadow-lg">
                   <CardHeader>
-                    <CardTitle>Recent Expenses</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-5 w-5 text-primary" />
+                      Recent Expenses
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {expenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-3 rounded bg-muted/50">
+                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-muted/50 to-muted/30 hover:from-muted/70 hover:to-muted/50 transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer">
                         <div className="flex items-center gap-3">
-                          <expense.icon className="h-4 w-4" />
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <expense.icon className="h-4 w-4 text-primary" />
+                          </div>
                           <div>
                             <p className="font-medium">{expense.description}</p>
                             <p className="text-sm text-muted-foreground">{expense.date}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-red-600">-₹{expense.amount}</p>
+                          <p className="font-semibold text-expense">-₹{expense.amount}</p>
                           <p className="text-xs text-muted-foreground">{expense.category}</p>
                         </div>
                       </div>
@@ -200,9 +213,12 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="card-3d border-0 shadow-lg">
                   <CardHeader>
-                    <CardTitle>Budget Status</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5 text-primary" />
+                      Budget Status
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {budgets.map((budget) => (
@@ -227,14 +243,17 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               </div>
 
               {/* goals */}
-              <Card>
+              <Card className="card-3d border-0 shadow-lg">
                 <CardHeader>
-                  <CardTitle>Savings Goals</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <PiggyBank className="h-5 w-5 text-primary" />
+                    Savings Goals
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-4">
                     {goals.map((goal) => (
-                      <div key={goal.name} className="space-y-3 p-4 rounded bg-muted/50">
+                      <div key={goal.name} className="space-y-3 p-5 rounded-lg bg-gradient-to-br from-muted/50 to-muted/30 hover:from-primary/10 hover:to-primary/5 transition-all duration-500 hover:shadow-xl hover:scale-105 cursor-pointer gradient-border">
                         <div className="flex items-center justify-between">
                           <h3 className="font-medium">{goal.name}</h3>
                           <span className="text-xs bg-muted px-2 py-1 rounded">{goal.deadline}</span>
