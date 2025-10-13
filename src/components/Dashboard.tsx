@@ -33,7 +33,6 @@ interface DashboardProps {
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'expenses' | 'goals' | 'budgets' | 'analytics'>('overview');
 
-  // basic data
   const stats = {
     balance: 850.50,
     income: 500.00,
@@ -75,7 +74,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="flex min-h-screen">
-        {/* sidebar */}
         <div className="w-60 glass-effect border-r backdrop-blur-xl shadow-lg">
           <div className="p-4 space-y-4">
             <div className="flex items-center gap-2">
@@ -99,7 +97,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             <div className="border-t pt-4">
               <Button 
                 variant="ghost" 
-                className="justify-start gap-2 w-full text-destructive"
+                className="justify-start gap-2 w-full text-destructive hover:bg-destructive/10"
                 onClick={onLogout}
               >
                 <LogOut className="h-4 w-4" />
@@ -109,7 +107,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
 
-        {/* content */}
         <div className="flex-1">
           <div className="p-6">
             <div className="mb-6">
@@ -124,7 +121,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
           {activeTab === 'overview' && (
             <div className="space-y-6">
-              {/* main stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Card className="stat-card border-0 shadow-lg">
                   <CardHeader className="pb-2">
@@ -183,7 +179,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 </Card>
               </div>
 
-              {/* recent stuff */}
               <div className="grid lg:grid-cols-2 gap-6">
                 <Card className="card-3d border-0 shadow-lg">
                   <CardHeader>
@@ -242,7 +237,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 </Card>
               </div>
 
-              {/* goals */}
               <Card className="card-3d border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">

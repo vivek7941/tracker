@@ -24,9 +24,7 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleLogin = () => {
-    // Auth state will be updated automatically
-  };
+  const handleLogin = () => {};
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
