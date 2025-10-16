@@ -19,12 +19,14 @@ import {
   Settings,
   Bell,
   User,
-  LogOut
+  LogOut,
+  Sparkles
 } from "lucide-react";
 import { ExpenseTracker } from "./ExpenseTracker";
 import { GoalTracker } from "./GoalTracker";
 import { BudgetOverview } from "./BudgetOverview";
 import { FinancialCharts } from "./FinancialCharts";
+import logo from "@/assets/logo.png";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -74,15 +76,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="flex min-h-screen">
-        <div className="w-60 glass-effect border-r backdrop-blur-xl shadow-lg">
-          <div className="p-4 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-primary to-primary/80 rounded-lg shadow-lg pulse-glow">
-                <PiggyBank className="h-5 w-5 text-white" />
+        <div className="w-60 glass-effect border-r backdrop-blur-xl shadow-lg relative overflow-hidden">
+          <div className="absolute inset-0 shimmer opacity-50"></div>
+          <div className="p-4 space-y-4 relative z-10">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/30 rounded-lg blur-md"></div>
+                <img src={logo} alt="Logo" className="h-10 w-10 relative" />
               </div>
               <div>
                 <h1 className="font-bold gradient-text text-lg">SmartBudget</h1>
-                <p className="text-xs text-muted-foreground">Budget App</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Sparkles className="h-3 w-3" />
+                  Your Finance Partner
+                </p>
               </div>
             </div>
 
@@ -122,76 +129,91 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           {activeTab === 'overview' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="stat-card border-0 shadow-lg">
-                  <CardHeader className="pb-2">
+                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-2 relative z-10">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-primary/10 rounded-lg">
+                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300 group-hover:scale-110 transform">
                         <DollarSign className="h-4 w-4 text-primary" />
                       </div>
                       Balance
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold gradient-text">₹{stats.balance}</div>
+                  <CardContent className="relative z-10">
+                    <div className="text-3xl font-bold gradient-text group-hover:scale-105 transition-transform duration-300">₹{stats.balance}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Current balance</p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg">
-                  <CardHeader className="pb-2">
+                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-income/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-income/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-2 relative z-10">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-income/10 rounded-lg">
+                      <div className="p-2 bg-income/10 rounded-lg group-hover:bg-income/20 transition-colors duration-300 group-hover:scale-110 transform">
                         <TrendingUp className="h-4 w-4 text-income" />
                       </div>
                       Income
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-income">₹{stats.income}</div>
+                  <CardContent className="relative z-10">
+                    <div className="text-3xl font-bold text-income group-hover:scale-105 transition-transform duration-300">₹{stats.income}</div>
+                    <p className="text-xs text-muted-foreground mt-1">This month</p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg">
-                  <CardHeader className="pb-2">
+                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-expense/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-expense/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-2 relative z-10">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-expense/10 rounded-lg">
+                      <div className="p-2 bg-expense/10 rounded-lg group-hover:bg-expense/20 transition-colors duration-300 group-hover:scale-110 transform">
                         <TrendingDown className="h-4 w-4 text-expense" />
                       </div>
                       Expenses
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-expense">₹{stats.expenses}</div>
+                  <CardContent className="relative z-10">
+                    <div className="text-3xl font-bold text-expense group-hover:scale-105 transition-transform duration-300">₹{stats.expenses}</div>
+                    <p className="text-xs text-muted-foreground mt-1">This month</p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg">
-                  <CardHeader className="pb-2">
+                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-savings/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-savings/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-2 relative z-10">
                     <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-savings/10 rounded-lg">
+                      <div className="p-2 bg-savings/10 rounded-lg group-hover:bg-savings/20 transition-colors duration-300 group-hover:scale-110 transform">
                         <Target className="h-4 w-4 text-savings" />
                       </div>
                       Savings
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-savings">₹{stats.savings}</div>
+                  <CardContent className="relative z-10">
+                    <div className="text-3xl font-bold text-savings group-hover:scale-105 transition-transform duration-300">₹{stats.savings}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Total saved</p>
                   </CardContent>
                 </Card>
               </div>
 
               <div className="grid lg:grid-cols-2 gap-6">
-                <Card className="card-3d border-0 shadow-lg">
+                <Card className="card-3d border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <CreditCard className="h-5 w-5 text-primary" />
+                    <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors duration-300">
+                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                        <CreditCard className="h-5 w-5 text-primary" />
+                      </div>
                       Recent Expenses
                     </CardTitle>
+                    <CardDescription>Your latest transactions</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {expenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-muted/50 to-muted/30 hover:from-muted/70 hover:to-muted/50 transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer">
+                    {expenses.map((expense, index) => (
+                      <div 
+                        key={expense.id} 
+                        className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-muted/50 to-muted/30 hover:from-primary/10 hover:to-primary/5 transition-all duration-300 hover:shadow-md hover:scale-[1.02] cursor-pointer border border-transparent hover:border-primary/20"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-primary/10 rounded-lg">
+                          <div className="p-2 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-300">
                             <expense.icon className="h-4 w-4 text-primary" />
                           </div>
                           <div>
@@ -201,34 +223,41 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-expense">-₹{expense.amount}</p>
-                          <p className="text-xs text-muted-foreground">{expense.category}</p>
+                          <Badge variant="outline" className="text-xs mt-1">{expense.category}</Badge>
                         </div>
                       </div>
                     ))}
                   </CardContent>
                 </Card>
 
-                <Card className="card-3d border-0 shadow-lg">
+                <Card className="card-3d border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-primary" />
+                    <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors duration-300">
+                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
+                        <Target className="h-5 w-5 text-primary" />
+                      </div>
                       Budget Status
                     </CardTitle>
+                    <CardDescription>Track your spending limits</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {budgets.map((budget) => (
-                      <div key={budget.name} className="space-y-2">
-                        <div className="flex justify-between">
+                  <CardContent className="space-y-5">
+                    {budgets.map((budget, index) => (
+                      <div 
+                        key={budget.name} 
+                        className="space-y-2 p-3 rounded-lg hover:bg-muted/30 transition-colors duration-300"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <div className="flex justify-between items-center">
                           <span className="font-medium">{budget.name}</span>
-                          <span className="text-sm text-muted-foreground">
-                            ₹{budget.spent} / ₹{budget.budget}
-                          </span>
+                          <Badge variant={budget.percentage > 80 ? "destructive" : "secondary"}>
+                            {budget.percentage}%
+                          </Badge>
                         </div>
-                        <Progress value={budget.percentage} className="h-2" />
+                        <Progress value={budget.percentage} className="h-2.5" />
                         <div className="flex justify-between text-xs">
-                          <span>{budget.percentage}% used</span>
-                          <span className="text-muted-foreground">
-                            ₹{budget.budget - budget.spent} left
+                          <span className="text-muted-foreground">₹{budget.spent} spent</span>
+                          <span className="text-muted-foreground font-medium">
+                            ₹{budget.budget - budget.spent} remaining
                           </span>
                         </div>
                       </div>

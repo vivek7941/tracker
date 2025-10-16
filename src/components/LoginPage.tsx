@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Wallet } from "lucide-react";
+import { Wallet, TrendingUp, Shield, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import logo from "@/assets/logo.png";
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -71,19 +72,41 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      
+      <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="flex justify-center items-center gap-2 mb-4">
-            <Wallet className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold">SmartBudget</h1>
+          <div className="flex justify-center items-center gap-3 mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl"></div>
+              <img src={logo} alt="SmartBudget Logo" className="h-16 w-16 relative floating" />
+            </div>
           </div>
-          <p className="text-muted-foreground">Track your expenses, reach your goals</p>
+          <h1 className="text-4xl font-bold gradient-text mb-2">SmartBudget</h1>
+          <p className="text-muted-foreground">Track expenses, achieve financial goals</p>
+          
+          <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-primary" />
+              <span>Secure</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-primary" />
+              <span>Smart</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>Easy</span>
+            </div>
+          </div>
         </div>
 
-        <Card className="p-6">
+        <Card className="p-6 card-3d border-0 shadow-2xl backdrop-blur-xl bg-card/95">
           <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl">Welcome back</CardTitle>
+            <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>Login or create a new account</CardDescription>
           </CardHeader>
           
@@ -122,7 +145,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/50 transition-all duration-300"
                     disabled={isLoading}
                   >
                     {isLoading ? "Loading..." : "Login"}
@@ -169,7 +192,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/50 transition-all duration-300"
                     disabled={isLoading}
                   >
                     {isLoading ? "Creating..." : "Register"}

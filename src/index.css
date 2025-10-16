@@ -59,6 +59,13 @@
     /* Layout */
     --radius: 0.375rem;
 
+    /* Gradient Effects */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 90% 70%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 50%) 100%);
+    --glow-primary: 0 0 30px hsl(262 83% 58% / 0.4);
+    --glow-hover: 0 0 40px hsl(262 83% 58% / 0.6);
+
     /* Finance Colors */
     --income: 120 100% 35%;
     --expense: 0 100% 50%;
@@ -137,6 +144,13 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 }
 
@@ -285,6 +299,36 @@
     }
     50% {
       box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+    }
+  }
+
+  /* Floating Animation */
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
     }
   }
 }
