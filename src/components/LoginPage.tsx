@@ -72,49 +72,77 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5"></div>
+      <div className="absolute inset-0 bg-grid-pattern"></div>
       
-      <div className="w-full max-w-md relative z-10">
-        <div className="text-center mb-8">
-          <div className="flex justify-center items-center gap-3 mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl"></div>
-              <img src={logo} alt="SmartBudget Logo" className="h-16 w-16 relative floating" />
+      {/* Floating gradient orbs */}
+      <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '-3s' }}></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-secondary/10 to-accent/10 rounded-full blur-3xl animate-pulse"></div>
+      
+      <div className="w-full max-w-md relative z-10 animate-scale-in">
+        {/* Hero Section */}
+        <div className="text-center mb-10">
+          <div className="flex justify-center items-center gap-4 mb-6">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+              <div className="relative p-4 bg-gradient-to-br from-primary to-secondary rounded-3xl shadow-2xl">
+                <img src={logo} alt="SmartBudget Logo" className="h-14 w-14 relative floating drop-shadow-lg" />
+              </div>
             </div>
           </div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">SmartBudget</h1>
-          <p className="text-muted-foreground">Track expenses, achieve financial goals</p>
           
-          <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-primary" />
-              <span>Secure</span>
+          <h1 className="text-5xl font-extrabold mb-3">
+            <span className="gradient-text">SmartBudget</span>
+          </h1>
+          <p className="text-lg text-muted-foreground mb-6">
+            Your intelligent financial companion
+          </p>
+          
+          {/* Feature badges */}
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 border border-primary/20">
+              <div className="p-1.5 bg-gradient-to-br from-primary to-secondary rounded-full">
+                <Shield className="h-3.5 w-3.5 text-white" />
+              </div>
+              <span className="text-sm font-medium text-primary">Bank-Level Security</span>
             </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-primary" />
-              <span>Smart</span>
+            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 transition-all duration-300 border border-secondary/20">
+              <div className="p-1.5 bg-gradient-to-br from-secondary to-primary rounded-full">
+                <TrendingUp className="h-3.5 w-3.5 text-white" />
+              </div>
+              <span className="text-sm font-medium text-secondary">Smart Analytics</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span>Easy</span>
+            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20">
+              <div className="p-1.5 bg-gradient-to-br from-accent to-warning rounded-full">
+                <Sparkles className="h-3.5 w-3.5 text-white" />
+              </div>
+              <span className="text-sm font-medium text-accent">AI-Powered</span>
             </div>
           </div>
         </div>
 
-        <Card className="p-6 card-3d border-0 shadow-2xl backdrop-blur-xl bg-card/95">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>Login or create a new account</CardDescription>
+        {/* Auth Card */}
+        <Card className="card-3d border-0 backdrop-blur-xl frosted-glass overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+          <CardHeader className="text-center pb-6 relative">
+            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Welcome back
+            </CardTitle>
+            <CardDescription className="text-base">Login or create your account to get started</CardDescription>
           </CardHeader>
           
-          <CardContent>
-            <Tabs defaultValue="login" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
+          <CardContent className="relative p-8">
+            <Tabs defaultValue="login" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2 p-1 bg-muted/50 backdrop-blur-sm">
+                <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white">
+                  Login
+                </TabsTrigger>
+                <TabsTrigger value="register" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary data-[state=active]:to-primary data-[state=active]:text-white">
+                  Register
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="login" className="space-y-4">
@@ -145,10 +173,17 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/50 transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-primary via-secondary to-primary bg-size-200 hover:bg-pos-100 shadow-lg hover:shadow-glow transition-all duration-500 font-semibold text-white border-0 hover:scale-[1.02]"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Loading..." : "Login"}
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Logging in...</span>
+                      </div>
+                    ) : (
+                      "Login to Dashboard"
+                    )}
                   </Button>
                 </form>
               </TabsContent>
@@ -192,10 +227,17 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/50 transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-secondary via-primary to-secondary bg-size-200 hover:bg-pos-100 shadow-lg hover:shadow-glow transition-all duration-500 font-semibold text-white border-0 hover:scale-[1.02]"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating..." : "Register"}
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Creating account...</span>
+                      </div>
+                    ) : (
+                      "Create Account"
+                    )}
                   </Button>
                 </form>
               </TabsContent>

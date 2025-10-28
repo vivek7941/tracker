@@ -6,81 +6,103 @@
 
 @layer base {
   :root {
-    /* Basic Colors with Gradient Support */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 15%;
+    /* Modern Color Palette */
+    --background: 220 20% 98%;
+    --foreground: 220 15% 10%;
     
-    /* Gradient Colors */
-    --gradient-start: 220 100% 50%;
-    --gradient-end: 270 100% 60%;
-    --gradient-accent: 200 100% 55%;
+    /* Vibrant Gradient Colors */
+    --gradient-start: 262 83% 58%;
+    --gradient-end: 221 83% 53%;
+    --gradient-accent: 200 100% 50%;
 
-    /* Card System */
+    /* Card System with depth */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --card-foreground: 220 15% 10%;
 
     /* Popover System */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --popover-foreground: 220 15% 10%;
 
-    /* Primary - Simple Blue */
-    --primary: 220 100% 50%;
+    /* Primary - Vibrant Purple/Blue */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
+    --primary-hover: 262 83% 50%;
+    --primary-light: 262 70% 85%;
 
-    /* Secondary - Simple Green */
-    --secondary: 120 100% 35%;
+    /* Secondary - Teal */
+    --secondary: 174 62% 47%;
     --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 174 62% 40%;
+    --secondary-light: 174 50% 85%;
 
-    /* Success - Basic Green */
-    --success: 120 100% 35%;
+    /* Success - Emerald Green */
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
+    --success-light: 142 50% 85%;
 
-    /* Muted Tones */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    /* Muted Tones - Warmer */
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    /* Accent - Orange */
-    --accent: 35 100% 50%;
+    /* Accent - Vibrant Coral */
+    --accent: 14 100% 57%;
     --accent-foreground: 0 0% 100%;
+    --accent-light: 14 80% 85%;
 
-    /* Warning - Yellow */
-    --warning: 45 100% 50%;
-    --warning-foreground: 0 0% 15%;
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+    --warning-light: 38 80% 85%;
 
-    /* Destructive - Red */
-    --destructive: 0 100% 50%;
+    /* Destructive - Rose */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
+    --destructive-light: 0 70% 85%;
 
-    /* Basic Elements */
-    --border: 0 0% 90%;
-    --input: 0 0% 95%;
-    --ring: 220 100% 50%;
+    /* Modern Elements */
+    --border: 220 15% 88%;
+    --input: 220 15% 96%;
+    --ring: 262 83% 58%;
 
-    /* Layout */
-    --radius: 0.375rem;
+    /* Layout with more rounding */
+    --radius: 0.75rem;
 
-    /* Gradient Effects */
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 90% 70%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
+    /* Advanced Gradient Effects */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(221 83% 53%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(174 62% 47%) 0%, hsl(221 83% 53%) 100%);
     --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 50%) 100%);
-    --glow-primary: 0 0 30px hsl(262 83% 58% / 0.4);
-    --glow-hover: 0 0 40px hsl(262 83% 58% / 0.6);
-
-    /* Finance Colors */
-    --income: 120 100% 35%;
-    --expense: 0 100% 50%;
-    --savings: 220 100% 50%;
-    --investment: 270 100% 50%;
+    --gradient-warm: linear-gradient(135deg, hsl(14 100% 57%) 0%, hsl(38 92% 50%) 100%);
+    --gradient-mesh: radial-gradient(at 27% 37%, hsl(262 83% 58%) 0px, transparent 50%),
+                      radial-gradient(at 97% 21%, hsl(221 83% 53%) 0px, transparent 50%),
+                      radial-gradient(at 52% 99%, hsl(174 62% 47%) 0px, transparent 50%);
     
-    /* Simple Category Colors */
-    --category-food: 35 100% 50%;
-    --category-transport: 220 100% 50%;
-    --category-utilities: 120 100% 35%;
-    --category-entertainment: 270 100% 50%;
-    --category-healthcare: 0 100% 50%;
-    --category-education: 250 100% 50%;
-    --category-travel: 200 100% 50%;
-    --category-shopping: 320 100% 50%;
+    /* Glow Effects */
+    --glow-primary: 0 0 30px hsl(262 83% 58% / 0.4);
+    --glow-hover: 0 0 50px hsl(262 83% 58% / 0.6);
+    --glow-secondary: 0 0 30px hsl(174 62% 47% / 0.4);
+    
+    /* Shadow System */
+    --shadow-soft: 0 2px 8px hsl(220 15% 10% / 0.05);
+    --shadow-medium: 0 4px 16px hsl(220 15% 10% / 0.1);
+    --shadow-strong: 0 8px 32px hsl(220 15% 10% / 0.15);
+    --shadow-3d: 0 20px 40px hsl(220 15% 10% / 0.2), 0 4px 8px hsl(220 15% 10% / 0.1);
+    --shadow-glow: 0 0 40px hsl(262 83% 58% / 0.4), 0 8px 24px hsl(220 15% 10% / 0.2);
+
+    /* Finance Colors - More Professional */
+    --income: 142 76% 36%;
+    --expense: 0 84% 60%;
+    --savings: 221 83% 53%;
+    --investment: 262 83% 58%;
+    
+    /* Vibrant Category Colors */
+    --category-food: 14 100% 57%;
+    --category-transport: 221 83% 53%;
+    --category-utilities: 174 62% 47%;
+    --category-entertainment: 262 83% 58%;
+    --category-healthcare: 0 84% 60%;
+    --category-education: 250 60% 55%;
+    --category-travel: 200 90% 50%;
+    --category-shopping: 320 70% 55%;
 
     /* Sidebar Colors */
     --sidebar-background: 0 0% 98%;
@@ -94,37 +116,51 @@
   }
 
   .dark {
-    /* Simple Dark Mode */
-    --background: 0 0% 10%;
-    --foreground: 0 0% 90%;
+    /* Modern Dark Mode */
+    --background: 220 20% 8%;
+    --foreground: 220 10% 95%;
 
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 90%;
+    --card: 220 20% 12%;
+    --card-foreground: 220 10% 95%;
 
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 90%;
+    --popover: 220 20% 12%;
+    --popover-foreground: 220 10% 95%;
 
-    --primary: 220 100% 60%;
-    --primary-foreground: 0 0% 10%;
+    --primary: 262 90% 70%;
+    --primary-foreground: 220 20% 8%;
+    --primary-hover: 262 90% 60%;
+    --primary-light: 262 50% 25%;
 
-    --secondary: 120 100% 40%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 174 70% 50%;
+    --secondary-foreground: 220 20% 8%;
+    --secondary-hover: 174 70% 45%;
+    --secondary-light: 174 40% 20%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 10% 60%;
 
-    --accent: 35 100% 55%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 14 100% 65%;
+    --accent-foreground: 220 20% 8%;
+    --accent-light: 14 60% 25%;
 
-    --warning: 45 100% 55%;
-    --warning-foreground: 0 0% 10%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 220 20% 8%;
+    --warning-light: 38 60% 25%;
 
-    --destructive: 0 100% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 220 10% 95%;
+    --destructive-light: 0 60% 25%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 220 100% 60%;
+    --border: 220 20% 22%;
+    --input: 220 20% 18%;
+    --ring: 262 90% 70%;
+    
+    /* Dark Mode Shadows */
+    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.2);
+    --shadow-medium: 0 4px 16px hsl(0 0% 0% / 0.3);
+    --shadow-strong: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-3d: 0 20px 40px hsl(0 0% 0% / 0.5), 0 4px 8px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(262 90% 70% / 0.3), 0 8px 24px hsl(0 0% 0% / 0.4);
 
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 90%;
@@ -148,9 +184,15 @@
 
   .bg-grid-pattern {
     background-image: 
-      linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
+      linear-gradient(hsl(220 15% 10% / 0.03) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, hsl(220 15% 10% / 0.03) 1.5px, transparent 1.5px);
+    background-size: 50px 50px;
+  }
+  
+  .dark .bg-grid-pattern {
+    background-image: 
+      linear-gradient(hsl(220 10% 95% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(220 10% 95% / 0.05) 1px, transparent 1px);
   }
 }
 
@@ -215,46 +257,86 @@
     background: hsl(var(--category-shopping));
   }
 
-  /* 3D Card Effects */
+  /* Modern 3D Card Effects */
   .card-3d {
-    @apply transition-all duration-300 ease-out;
+    @apply relative transition-all duration-500 ease-out;
     transform-style: preserve-3d;
+    box-shadow: var(--shadow-medium);
+  }
+
+  .card-3d::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300;
+    background: var(--gradient-primary);
+    z-index: -1;
+    filter: blur(20px);
   }
 
   .card-3d:hover {
-    @apply shadow-2xl;
-    transform: translateY(-8px) rotateX(2deg);
+    box-shadow: var(--shadow-3d);
+    transform: translateY(-8px) rotateX(2deg) scale(1.02);
+  }
+
+  .card-3d:hover::before {
+    @apply opacity-20;
   }
 
   .stat-card {
-    @apply relative overflow-hidden transition-all duration-500;
-    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    @apply relative overflow-hidden transition-all duration-500 cursor-pointer;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted) / 0.5) 100%);
+    border: 1px solid hsl(var(--border));
   }
 
   .stat-card::before {
     content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
-    background: linear-gradient(135deg, hsl(var(--gradient-start) / 0.1) 0%, hsl(var(--gradient-end) / 0.1) 100%);
+    @apply absolute inset-0 opacity-0 transition-all duration-500;
+    background: var(--gradient-primary);
+  }
+
+  .stat-card::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-1 opacity-0 transition-opacity duration-500;
+    background: var(--gradient-primary);
   }
 
   .stat-card:hover::before {
+    @apply opacity-10;
+  }
+
+  .stat-card:hover::after {
     @apply opacity-100;
   }
 
   .stat-card:hover {
-    @apply shadow-xl;
-    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-6px) scale(1.03);
+    border-color: hsl(var(--primary) / 0.3);
   }
 
-  /* Glass Effect */
+  /* Advanced Glass Effect */
   .glass-effect {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow-soft);
   }
 
   .dark .glass-effect {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Frosted Glass */
+  .frosted-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .frosted-glass {
+    background: rgba(20, 20, 30, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
