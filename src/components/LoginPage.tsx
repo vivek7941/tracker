@@ -94,10 +94,10 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
             </div>
           </div>
           
-          <h1 className="text-5xl font-extrabold mb-3">
+          <h1 className="text-5xl font-display font-extrabold mb-3">
             <span className="gradient-text">SmartBudget</span>
           </h1>
-          <p className="text-lg text-muted-foreground mb-6">
+          <p className="text-lg text-muted-foreground mb-6 font-medium">
             Your intelligent financial companion
           </p>
           
@@ -125,13 +125,13 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
         </div>
 
         {/* Auth Card */}
-        <Card className="card-3d border-0 backdrop-blur-xl frosted-glass overflow-hidden">
+        <Card className="card-3d border-0 backdrop-blur-xl frosted-glass overflow-hidden shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
           <CardHeader className="text-center pb-6 relative">
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <CardTitle className="text-3xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-base">Login or create your account to get started</CardDescription>
+            <CardDescription className="text-base font-medium">Login or create your account to get started</CardDescription>
           </CardHeader>
           
           <CardContent className="relative p-8">

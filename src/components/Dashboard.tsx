@@ -61,135 +61,214 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const NavButton = ({ tab, icon: Icon, label }: { tab: string, icon: any, label: string }) => (
     <Button
       variant="ghost"
-      className={`justify-start gap-2 w-full transition-all duration-300 ${
+      className={`justify-start gap-3 w-full transition-all duration-300 font-medium ${
         activeTab === tab 
-          ? 'bg-gradient-to-r from-primary/20 to-primary/10 text-primary shadow-md transform scale-105' 
-          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:translate-x-1'
+          ? 'bg-gradient-to-r from-primary/15 to-secondary/15 text-primary shadow-sm border-l-2 border-primary' 
+          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:translate-x-1 border-l-2 border-transparent'
       }`}
       onClick={() => setActiveTab(tab as any)}
     >
-      <Icon className={`h-4 w-4 transition-transform duration-300 ${activeTab === tab ? 'scale-110' : ''}`} />
-      {label}
+      <div className={`p-1.5 rounded-lg transition-all duration-300 ${
+        activeTab === tab 
+          ? 'bg-gradient-to-br from-primary to-secondary text-white' 
+          : 'bg-muted/50 group-hover:bg-muted'
+      }`}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <span className={activeTab === tab ? 'font-semibold' : ''}>{label}</span>
     </Button>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="flex min-h-screen">
-        <div className="w-60 glass-effect border-r backdrop-blur-xl shadow-lg relative overflow-hidden">
-          <div className="absolute inset-0 shimmer opacity-50"></div>
-          <div className="p-4 space-y-4 relative z-10">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/30 rounded-lg blur-md"></div>
-                <img src={logo} alt="Logo" className="h-10 w-10 relative" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5">
+      {/* Top Header Bar */}
+      <header className="bg-card/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50 shadow-sm">
+        <div className="px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-xl blur-lg opacity-70 group-hover:opacity-90 transition-opacity"></div>
+                <div className="relative p-2 bg-gradient-to-br from-primary to-secondary rounded-xl">
+                  <img src={logo} alt="Logo" className="h-8 w-8" />
+                </div>
               </div>
               <div>
-                <h1 className="font-bold gradient-text text-lg">SmartBudget</h1>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  Your Finance Partner
-                </p>
+                <h1 className="font-display font-bold text-xl gradient-text">SmartBudget</h1>
+                <p className="text-xs text-muted-foreground font-medium">Financial Intelligence</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors">
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
+            </Button>
+            <Button variant="ghost" size="icon" className="hover:bg-primary/10 transition-colors">
+              <Settings className="h-5 w-5" />
+            </Button>
+            <div className="h-8 w-px bg-border"></div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="gap-2 hover:bg-destructive/10 hover:text-destructive transition-all"
+              onClick={onLogout}
+            >
+              <User className="h-4 w-4" />
+              <span className="font-medium">Logout</span>
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex min-h-[calc(100vh-73px)]">
+        {/* Sleek Sidebar */}
+        <div className="w-72 bg-card/50 backdrop-blur-xl border-r border-border/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+          <div className="p-6 space-y-6 relative z-10">
+            {/* Quick Stats in Sidebar */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Quick Overview</p>
+              <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground font-medium">Balance</span>
+                  <span className="text-xl font-bold gradient-text">₹{stats.balance}</span>
+                </div>
+                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+                <div className="flex justify-between text-xs">
+                  <div className="text-center">
+                    <p className="text-muted-foreground">Income</p>
+                    <p className="font-semibold text-income mt-0.5">+₹{stats.income}</p>
+                  </div>
+                  <div className="w-px bg-border"></div>
+                  <div className="text-center">
+                    <p className="text-muted-foreground">Expenses</p>
+                    <p className="font-semibold text-expense mt-0.5">-₹{stats.expenses}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <nav className="space-y-1">
-              <NavButton tab="overview" icon={DollarSign} label="Overview" />
-              <NavButton tab="expenses" icon={CreditCard} label="Expenses" />
-              <NavButton tab="budgets" icon={Target} label="Budgets" />
-              <NavButton tab="goals" icon={PiggyBank} label="Goals" />
-              <NavButton tab="analytics" icon={TrendingUp} label="Charts" />
-            </nav>
+            {/* Navigation */}
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Navigation</p>
 
-            <div className="border-t pt-4">
-              <Button 
-                variant="ghost" 
-                className="justify-start gap-2 w-full text-destructive hover:bg-destructive/10"
-                onClick={onLogout}
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
+              <nav className="space-y-1">
+                <NavButton tab="overview" icon={Home} label="Dashboard" />
+                <NavButton tab="expenses" icon={CreditCard} label="Transactions" />
+                <NavButton tab="budgets" icon={Target} label="Budget Plan" />
+                <NavButton tab="goals" icon={PiggyBank} label="Savings Goals" />
+                <NavButton tab="analytics" icon={TrendingUp} label="Analytics" />
+              </nav>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="mt-auto pt-4 border-t border-border/50 space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Actions</p>
+              <Button className="w-full justify-start gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
+                Add Transaction
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="flex-1">
-          <div className="p-6">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold">
-                {activeTab === 'overview' && 'Dashboard'}
-                {activeTab === 'expenses' && 'Expenses'}
-                {activeTab === 'budgets' && 'Budgets'}
-                {activeTab === 'goals' && 'Goals'}
-                {activeTab === 'analytics' && 'Charts'}
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
+          <div className="p-8 max-w-[1600px] mx-auto">
+            {/* Page Header */}
+            <div className="mb-8">
+              <h1 className="text-4xl font-display font-bold mb-2">
+                {activeTab === 'overview' && 'Dashboard Overview'}
+                {activeTab === 'expenses' && 'Transaction History'}
+                {activeTab === 'budgets' && 'Budget Management'}
+                {activeTab === 'goals' && 'Financial Goals'}
+                {activeTab === 'analytics' && 'Financial Analytics'}
               </h1>
+              <p className="text-muted-foreground font-medium">
+                {activeTab === 'overview' && 'Get a complete view of your financial health'}
+                {activeTab === 'expenses' && 'Track and manage all your expenses'}
+                {activeTab === 'budgets' && 'Plan and monitor your spending limits'}
+                {activeTab === 'goals' && 'Set and achieve your savings targets'}
+                {activeTab === 'analytics' && 'Deep dive into your financial patterns'}
+              </p>
             </div>
 
           {activeTab === 'overview' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <CardHeader className="pb-2 relative z-10">
-                    <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300 group-hover:scale-110 transform">
-                        <DollarSign className="h-4 w-4 text-primary" />
+            <div className="space-y-8">
+              {/* Stats Cards - More Compact & Modern */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Balance</CardTitle>
+                      <div className="p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                        <DollarSign className="h-5 w-5 text-primary" />
                       </div>
-                      Balance
-                    </CardTitle>
+                    </div>
                   </CardHeader>
-                  <CardContent className="relative z-10">
-                    <div className="text-3xl font-bold gradient-text group-hover:scale-105 transition-transform duration-300">₹{stats.balance}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Current balance</p>
+                  <CardContent className="relative z-10 pb-4">
+                    <div className="text-4xl font-display font-extrabold gradient-text mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.balance.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3 text-income" />
+                      Available funds
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-income/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-income/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <CardHeader className="pb-2 relative z-10">
-                    <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-income/10 rounded-lg group-hover:bg-income/20 transition-colors duration-300 group-hover:scale-110 transform">
-                        <TrendingUp className="h-4 w-4 text-income" />
+                <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-income/10 via-income/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Income</CardTitle>
+                      <div className="p-2 bg-gradient-to-br from-income/20 to-income/10 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                        <TrendingUp className="h-5 w-5 text-income" />
                       </div>
-                      Income
-                    </CardTitle>
+                    </div>
                   </CardHeader>
-                  <CardContent className="relative z-10">
-                    <div className="text-3xl font-bold text-income group-hover:scale-105 transition-transform duration-300">₹{stats.income}</div>
-                    <p className="text-xs text-muted-foreground mt-1">This month</p>
+                  <CardContent className="relative z-10 pb-4">
+                    <div className="text-4xl font-display font-extrabold text-income mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.income.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                      <span className="text-income">+12%</span> from last month
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-expense/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-expense/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <CardHeader className="pb-2 relative z-10">
-                    <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-expense/10 rounded-lg group-hover:bg-expense/20 transition-colors duration-300 group-hover:scale-110 transform">
-                        <TrendingDown className="h-4 w-4 text-expense" />
+                <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-expense/10 via-expense/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Expenses</CardTitle>
+                      <div className="p-2 bg-gradient-to-br from-expense/20 to-expense/10 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                        <TrendingDown className="h-5 w-5 text-expense" />
                       </div>
-                      Expenses
-                    </CardTitle>
+                    </div>
                   </CardHeader>
-                  <CardContent className="relative z-10">
-                    <div className="text-3xl font-bold text-expense group-hover:scale-105 transition-transform duration-300">₹{stats.expenses}</div>
-                    <p className="text-xs text-muted-foreground mt-1">This month</p>
+                  <CardContent className="relative z-10 pb-4">
+                    <div className="text-4xl font-display font-extrabold text-expense mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.expenses.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                      <span className="text-expense">-8%</span> from last month
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="stat-card border-0 shadow-lg hover:shadow-2xl hover:shadow-savings/20 transition-all duration-500 group cursor-pointer overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-savings/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <CardHeader className="pb-2 relative z-10">
-                    <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="p-2 bg-savings/10 rounded-lg group-hover:bg-savings/20 transition-colors duration-300 group-hover:scale-110 transform">
-                        <Target className="h-4 w-4 text-savings" />
+                <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-savings/10 via-savings/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Savings</CardTitle>
+                      <div className="p-2 bg-gradient-to-br from-savings/20 to-savings/10 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                        <PiggyBank className="h-5 w-5 text-savings" />
                       </div>
-                      Savings
-                    </CardTitle>
+                    </div>
                   </CardHeader>
-                  <CardContent className="relative z-10">
-                    <div className="text-3xl font-bold text-savings group-hover:scale-105 transition-transform duration-300">₹{stats.savings}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Total saved</p>
+                  <CardContent className="relative z-10 pb-4">
+                    <div className="text-4xl font-display font-extrabold text-savings mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.savings.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3 text-savings" />
+                      40% of income
+                    </p>
                   </CardContent>
                 </Card>
               </div>
