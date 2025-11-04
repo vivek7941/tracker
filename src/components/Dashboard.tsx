@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -20,7 +21,9 @@ import {
   Bell,
   User,
   LogOut,
-  Sparkles
+  Sparkles,
+  Menu,
+  X
 } from "lucide-react";
 import { ExpenseTracker } from "./ExpenseTracker";
 import { GoalTracker } from "./GoalTracker";
@@ -34,6 +37,7 @@ interface DashboardProps {
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'expenses' | 'goals' | 'budgets' | 'analytics'>('overview');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const stats = {
     balance: 850.50,
@@ -58,7 +62,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { name: "New Laptop", current: 320, target: 800, percentage: 40, deadline: "Aug 2024" }
   ];
 
-  const NavButton = ({ tab, icon: Icon, label }: { tab: string, icon: any, label: string }) => (
+  const NavButton = ({ tab, icon: Icon, label, onClick }: { tab: string, icon: any, label: string, onClick?: () => void }) => (
     <Button
       variant="ghost"
       className={`justify-start gap-3 w-full transition-all duration-300 font-medium ${
@@ -66,7 +70,10 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           ? 'bg-gradient-to-r from-primary/15 to-secondary/15 text-primary shadow-sm border-l-2 border-primary' 
           : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:translate-x-1 border-l-2 border-transparent'
       }`}
-      onClick={() => setActiveTab(tab as any)}
+      onClick={() => {
+        setActiveTab(tab as any);
+        onClick?.();
+      }}
     >
       <div className={`p-1.5 rounded-lg transition-all duration-300 ${
         activeTab === tab 
@@ -79,113 +86,133 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     </Button>
   );
 
+  const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
+    <>
+      {/* Quick Stats in Sidebar */}
+      <div className="space-y-3">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Quick Overview</p>
+        <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground font-medium">Balance</span>
+            <span className="text-xl font-bold gradient-text">₹{stats.balance}</span>
+          </div>
+          <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+          <div className="flex justify-between text-xs">
+            <div className="text-center">
+              <p className="text-muted-foreground">Income</p>
+              <p className="font-semibold text-income mt-0.5">+₹{stats.income}</p>
+            </div>
+            <div className="w-px bg-border"></div>
+            <div className="text-center">
+              <p className="text-muted-foreground">Expenses</p>
+              <p className="font-semibold text-expense mt-0.5">-₹{stats.expenses}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Navigation</p>
+
+        <nav className="space-y-1">
+          <NavButton tab="overview" icon={Home} label="Dashboard" onClick={onNavClick} />
+          <NavButton tab="expenses" icon={CreditCard} label="Transactions" onClick={onNavClick} />
+          <NavButton tab="budgets" icon={Target} label="Budget Plan" onClick={onNavClick} />
+          <NavButton tab="goals" icon={PiggyBank} label="Savings Goals" onClick={onNavClick} />
+          <NavButton tab="analytics" icon={TrendingUp} label="Analytics" onClick={onNavClick} />
+        </nav>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mt-auto pt-4 border-t border-border/50 space-y-2">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Actions</p>
+        <Button className="w-full justify-start gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
+          <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
+          Add Transaction
+        </Button>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5">
       {/* Top Header Bar */}
       <header className="bg-card/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50 shadow-sm">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
+        <div className="px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Mobile Menu Button */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 p-0">
+                <div className="p-6 space-y-6 h-full flex flex-col">
+                  <SidebarContent onNavClick={() => setMobileMenuOpen(false)} />
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-xl blur-lg opacity-70 group-hover:opacity-90 transition-opacity"></div>
-                <div className="relative p-2 bg-gradient-to-br from-primary to-secondary rounded-xl">
-                  <img src={logo} alt="Logo" className="h-8 w-8" />
+                <div className="relative p-1.5 sm:p-2 bg-gradient-to-br from-primary to-secondary rounded-xl">
+                  <img src={logo} alt="Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
                 </div>
               </div>
               <div>
-                <h1 className="font-display font-bold text-xl gradient-text">SmartBudget</h1>
-                <p className="text-xs text-muted-foreground font-medium">Financial Intelligence</p>
+                <h1 className="font-display font-bold text-lg sm:text-xl gradient-text">SmartBudget</h1>
+                <p className="text-xs text-muted-foreground font-medium hidden sm:block">Financial Intelligence</p>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors">
-              <Bell className="h-5 w-5" />
+          <div className="flex items-center gap-1 sm:gap-3">
+            <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10">
+              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-primary/10 transition-colors">
-              <Settings className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10 hidden sm:flex">
+              <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
-            <div className="h-8 w-px bg-border"></div>
+            <div className="h-6 sm:h-8 w-px bg-border hidden sm:block"></div>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="gap-2 hover:bg-destructive/10 hover:text-destructive transition-all"
+              className="gap-1 sm:gap-2 hover:bg-destructive/10 hover:text-destructive transition-all h-8 sm:h-9 px-2 sm:px-3"
               onClick={onLogout}
             >
-              <User className="h-4 w-4" />
-              <span className="font-medium">Logout</span>
+              <User className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="font-medium text-xs sm:text-sm hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-73px)]">
-        {/* Sleek Sidebar */}
-        <div className="w-72 bg-card/50 backdrop-blur-xl border-r border-border/50 relative overflow-hidden">
+      <div className="flex min-h-[calc(100vh-57px)] sm:min-h-[calc(100vh-73px)]">
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="hidden lg:block w-72 bg-card/50 backdrop-blur-xl border-r border-border/50 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
-          <div className="p-6 space-y-6 relative z-10">
-            {/* Quick Stats in Sidebar */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Quick Overview</p>
-              <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground font-medium">Balance</span>
-                  <span className="text-xl font-bold gradient-text">₹{stats.balance}</span>
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
-                <div className="flex justify-between text-xs">
-                  <div className="text-center">
-                    <p className="text-muted-foreground">Income</p>
-                    <p className="font-semibold text-income mt-0.5">+₹{stats.income}</p>
-                  </div>
-                  <div className="w-px bg-border"></div>
-                  <div className="text-center">
-                    <p className="text-muted-foreground">Expenses</p>
-                    <p className="font-semibold text-expense mt-0.5">-₹{stats.expenses}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Navigation</p>
-
-              <nav className="space-y-1">
-                <NavButton tab="overview" icon={Home} label="Dashboard" />
-                <NavButton tab="expenses" icon={CreditCard} label="Transactions" />
-                <NavButton tab="budgets" icon={Target} label="Budget Plan" />
-                <NavButton tab="goals" icon={PiggyBank} label="Savings Goals" />
-                <NavButton tab="analytics" icon={TrendingUp} label="Analytics" />
-              </nav>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="mt-auto pt-4 border-t border-border/50 space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Actions</p>
-              <Button className="w-full justify-start gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
-                <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
-                Add Transaction
-              </Button>
-            </div>
+          <div className="p-6 space-y-6 relative z-10 h-full flex flex-col">
+            <SidebarContent />
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8 max-w-[1600px] mx-auto">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto">
             {/* Page Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-display font-bold mb-2">
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold mb-2">
                 {activeTab === 'overview' && 'Dashboard Overview'}
                 {activeTab === 'expenses' && 'Transaction History'}
                 {activeTab === 'budgets' && 'Budget Management'}
                 {activeTab === 'goals' && 'Financial Goals'}
                 {activeTab === 'analytics' && 'Financial Analytics'}
               </h1>
-              <p className="text-muted-foreground font-medium">
+              <p className="text-sm sm:text-base text-muted-foreground font-medium">
                 {activeTab === 'overview' && 'Get a complete view of your financial health'}
                 {activeTab === 'expenses' && 'Track and manage all your expenses'}
                 {activeTab === 'budgets' && 'Plan and monitor your spending limits'}
@@ -195,9 +222,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </div>
 
           {activeTab === 'overview' && (
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {/* Stats Cards - More Compact & Modern */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                 <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <CardHeader className="pb-3 relative z-10">
@@ -209,7 +236,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     </div>
                   </CardHeader>
                   <CardContent className="relative z-10 pb-4">
-                    <div className="text-4xl font-display font-extrabold gradient-text mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.balance.toFixed(2)}</div>
+                    <div className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold gradient-text mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.balance.toFixed(2)}</div>
                     <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                       <TrendingUp className="h-3 w-3 text-income" />
                       Available funds
@@ -228,7 +255,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     </div>
                   </CardHeader>
                   <CardContent className="relative z-10 pb-4">
-                    <div className="text-4xl font-display font-extrabold text-income mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.income.toFixed(2)}</div>
+                    <div className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-income mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.income.toFixed(2)}</div>
                     <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                       <span className="text-income">+12%</span> from last month
                     </p>
@@ -246,7 +273,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     </div>
                   </CardHeader>
                   <CardContent className="relative z-10 pb-4">
-                    <div className="text-4xl font-display font-extrabold text-expense mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.expenses.toFixed(2)}</div>
+                    <div className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-expense mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.expenses.toFixed(2)}</div>
                     <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                       <span className="text-expense">-8%</span> from last month
                     </p>
@@ -264,7 +291,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     </div>
                   </CardHeader>
                   <CardContent className="relative z-10 pb-4">
-                    <div className="text-4xl font-display font-extrabold text-savings mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.savings.toFixed(2)}</div>
+                    <div className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-savings mb-1 group-hover:scale-105 transition-transform duration-300">₹{stats.savings.toFixed(2)}</div>
                     <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                       <TrendingUp className="h-3 w-3 text-savings" />
                       40% of income
@@ -273,7 +300,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 </Card>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Card className="card-3d border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors duration-300">

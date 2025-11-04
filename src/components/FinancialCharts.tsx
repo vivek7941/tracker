@@ -59,8 +59,8 @@ const FinancialCharts = () => {
   const COLORS = ['#f97316', '#3b82f6', '#10b981', '#8b5cf6'];
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="grid lg:grid-cols-2 gap-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -70,7 +70,7 @@ const FinancialCharts = () => {
             <CardDescription>Your spending breakdown</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <div className="h-64 sm:h-80">
               {expenseByCategory.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -109,7 +109,7 @@ const FinancialCharts = () => {
             <CardDescription>How you're tracking</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <div className="h-64 sm:h-80">
               {budgetVsSpending.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={budgetVsSpending}>

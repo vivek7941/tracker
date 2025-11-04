@@ -72,54 +72,54 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center p-3 sm:p-4 overflow-hidden">
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5"></div>
       <div className="absolute inset-0 bg-grid-pattern"></div>
       
-      {/* Floating gradient orbs */}
-      <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-accent/20 to-primary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '-3s' }}></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-secondary/10 to-accent/10 rounded-full blur-3xl animate-pulse"></div>
+      {/* Floating gradient orbs - smaller on mobile */}
+      <div className="absolute top-10 sm:top-20 left-10 sm:left-20 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-to-r from-primary/20 sm:from-primary/30 to-secondary/20 sm:to-secondary/30 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-10 sm:bottom-20 right-10 sm:right-20 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-to-r from-accent/15 sm:from-accent/20 to-primary/15 sm:to-primary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '-3s' }}></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-to-r from-secondary/10 to-accent/10 rounded-full blur-3xl animate-pulse"></div>
       
       <div className="w-full max-w-md relative z-10 animate-scale-in">
         {/* Hero Section */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center items-center gap-4 mb-6">
+        <div className="text-center mb-6 sm:mb-10">
+          <div className="flex justify-center items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
-              <div className="relative p-4 bg-gradient-to-br from-primary to-secondary rounded-3xl shadow-2xl">
-                <img src={logo} alt="SmartBudget Logo" className="h-14 w-14 relative floating drop-shadow-lg" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+              <div className="relative p-3 sm:p-4 bg-gradient-to-br from-primary to-secondary rounded-2xl sm:rounded-3xl shadow-2xl">
+                <img src={logo} alt="SmartBudget Logo" className="h-10 w-10 sm:h-14 sm:w-14 relative floating drop-shadow-lg" />
               </div>
             </div>
           </div>
           
-          <h1 className="text-5xl font-display font-extrabold mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold mb-2 sm:mb-3">
             <span className="gradient-text">SmartBudget</span>
           </h1>
-          <p className="text-lg text-muted-foreground mb-6 font-medium">
+          <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 font-medium px-4 sm:px-0">
             Your intelligent financial companion
           </p>
           
           {/* Feature badges */}
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 border border-primary/20">
-              <div className="p-1.5 bg-gradient-to-br from-primary to-secondary rounded-full">
-                <Shield className="h-3.5 w-3.5 text-white" />
+          <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap px-2">
+            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 border border-primary/20">
+              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-primary to-secondary rounded-full">
+                <Shield className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
               </div>
-              <span className="text-sm font-medium text-primary">Bank-Level Security</span>
+              <span className="text-xs sm:text-sm font-medium text-primary">Bank-Level Security</span>
             </div>
-            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 transition-all duration-300 border border-secondary/20">
-              <div className="p-1.5 bg-gradient-to-br from-secondary to-primary rounded-full">
-                <TrendingUp className="h-3.5 w-3.5 text-white" />
+            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 transition-all duration-300 border border-secondary/20">
+              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-secondary to-primary rounded-full">
+                <TrendingUp className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
               </div>
-              <span className="text-sm font-medium text-secondary">Smart Analytics</span>
+              <span className="text-xs sm:text-sm font-medium text-secondary">Smart Analytics</span>
             </div>
-            <div className="group flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20">
-              <div className="p-1.5 bg-gradient-to-br from-accent to-warning rounded-full">
-                <Sparkles className="h-3.5 w-3.5 text-white" />
+            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20">
+              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-accent to-warning rounded-full">
+                <Sparkles className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
               </div>
-              <span className="text-sm font-medium text-accent">AI-Powered</span>
+              <span className="text-xs sm:text-sm font-medium text-accent">AI-Powered</span>
             </div>
           </div>
         </div>
@@ -127,20 +127,20 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
         {/* Auth Card */}
         <Card className="card-3d border-0 backdrop-blur-xl frosted-glass overflow-hidden shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
-          <CardHeader className="text-center pb-6 relative">
-            <CardTitle className="text-3xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+          <CardHeader className="text-center pb-4 sm:pb-6 relative px-4 sm:px-6 pt-6">
+            <CardTitle className="text-2xl sm:text-3xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-base font-medium">Login or create your account to get started</CardDescription>
+            <CardDescription className="text-sm sm:text-base font-medium">Login or create your account to get started</CardDescription>
           </CardHeader>
           
-          <CardContent className="relative p-8">
-            <Tabs defaultValue="login" className="space-y-6">
+          <CardContent className="relative p-4 sm:p-8">
+            <Tabs defaultValue="login" className="space-y-4 sm:space-y-6">
               <TabsList className="grid w-full grid-cols-2 p-1 bg-muted/50 backdrop-blur-sm">
-                <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white">
+                <TabsTrigger value="login" className="text-sm sm:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white">
                   Login
                 </TabsTrigger>
-                <TabsTrigger value="register" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary data-[state=active]:to-primary data-[state=active]:text-white">
+                <TabsTrigger value="register" className="text-sm sm:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary data-[state=active]:to-primary data-[state=active]:text-white">
                   Register
                 </TabsTrigger>
               </TabsList>
