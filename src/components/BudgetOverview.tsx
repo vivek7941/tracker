@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, AlertTriangle, CheckCircle, ShoppingCart, Car, Gamepad2, Coffee } from "lucide-react";
+import { formatIndianNumber } from "@/lib/utils";
 
 const BudgetOverview = () => {
   const [budgets, setBudgets] = useState([]);
@@ -192,7 +193,7 @@ const BudgetOverview = () => {
             <CardTitle className="text-sm">Total Budget</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹{totalBudget}</div>
+            <div className="text-2xl font-bold">₹{formatIndianNumber(totalBudget)}</div>
             <p className="text-sm text-muted-foreground">This month</p>
           </CardContent>
         </Card>
@@ -202,7 +203,7 @@ const BudgetOverview = () => {
             <CardTitle className="text-sm">Spent</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">₹{totalSpent}</div>
+            <div className="text-2xl font-bold text-red-600">₹{formatIndianNumber(totalSpent)}</div>
             <p className="text-sm text-muted-foreground">{progress.toFixed(1)}% used</p>
           </CardContent>
         </Card>
@@ -212,7 +213,7 @@ const BudgetOverview = () => {
             <CardTitle className="text-sm">Left</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">₹{remaining}</div>
+            <div className="text-2xl font-bold text-green-600">₹{formatIndianNumber(remaining)}</div>
             <p className="text-sm text-muted-foreground">Available</p>
           </CardContent>
         </Card>
@@ -251,12 +252,12 @@ const BudgetOverview = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Spent</span>
-                    <span>₹{budget.spent_amount} / ₹{budget.budget_amount}</span>
+                    <span>₹{formatIndianNumber(Number(budget.spent_amount))} / ₹{formatIndianNumber(Number(budget.budget_amount))}</span>
                   </div>
                   <Progress value={prog} className="h-2" />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{prog.toFixed(1)}% used</span>
-                    <span>{left >= 0 ? `₹${left} left` : `₹${Math.abs(left)} over`}</span>
+                    <span>{left >= 0 ? `₹${formatIndianNumber(left)} left` : `₹${formatIndianNumber(Math.abs(left))} over`}</span>
                   </div>
                 </div>
 

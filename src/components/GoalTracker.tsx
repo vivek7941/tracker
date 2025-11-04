@@ -6,9 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Target, Laptop, Plane } from "lucide-react";
+import { Plus, Target, Laptop, Plane, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { formatIndianNumber } from "@/lib/utils";
 
 const GoalTracker = () => {
   const [goals, setGoals] = useState([]);
@@ -81,6 +82,27 @@ const GoalTracker = () => {
         });
         setIsAddDialogOpen(false);
       }
+    }
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    const { error } = await supabase
+      .from('goals')
+      .delete()
+      .eq('id', goalId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete goal",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Goal deleted",
+      });
+      fetchGoals();
     }
   };
 
@@ -181,9 +203,19 @@ const GoalTracker = () => {
                       </CardDescription>
                     </div>
                   </div>
-                  <Badge variant={progress >= 100 ? "default" : "outline"}>
-                    {progress >= 100 ? "Complete" : "In Progress"}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={progress >= 100 ? "default" : "outline"}>
+                      {progress >= 100 ? "Complete" : "In Progress"}
+                    </Badge>
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => handleDeleteGoal(goal.id)}
+                      className="h-8 w-8 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               
@@ -192,13 +224,13 @@ const GoalTracker = () => {
                   <div className="flex justify-between text-sm">
                     <span>Progress</span>
                     <span>
-                      ₹{parseFloat(goal.current_amount).toFixed(0)} / ₹{parseFloat(goal.target_amount).toFixed(0)}
+                      ₹{formatIndianNumber(parseFloat(goal.current_amount))} / ₹{formatIndianNumber(parseFloat(goal.target_amount))}
                     </span>
                   </div>
                   <Progress value={progress} className="h-2" />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{progress.toFixed(1)}% complete</span>
-                    <span>₹{remaining.toFixed(0)} remaining</span>
+                    <span>₹{formatIndianNumber(remaining)} remaining</span>
                   </div>
                 </div>
               </CardContent>

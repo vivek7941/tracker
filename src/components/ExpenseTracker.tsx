@@ -6,9 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Calendar, ShoppingCart, Car, Coffee, Gamepad2 } from "lucide-react";
+import { Plus, Calendar, ShoppingCart, Car, Coffee, Gamepad2, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { formatIndianNumber } from "@/lib/utils";
 
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
@@ -91,6 +92,27 @@ const ExpenseTracker = () => {
     }
   };
 
+  const handleDeleteExpense = async (expenseId: string) => {
+    const { error } = await supabase
+      .from('expenses')
+      .delete()
+      .eq('id', expenseId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete expense",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Expense deleted",
+      });
+      fetchExpenses();
+    }
+  };
+
   const getCategoryIcon = (categoryName: string) => {
     const category = categories.find(cat => cat.name === categoryName);
     return category?.icon || Coffee;
@@ -104,7 +126,7 @@ const ExpenseTracker = () => {
         <div>
           <h2 className="text-2xl font-bold">Expenses</h2>
           <p className="text-muted-foreground">
-            Total: ₹{totalExpenses.toFixed(2)}
+            Total: ₹{formatIndianNumber(totalExpenses)}
           </p>
         </div>
         
@@ -211,10 +233,18 @@ const ExpenseTracker = () => {
                     </div>
                   </div>
                   
-                  <div className="text-right">
+                  <div className="flex items-center gap-3">
                     <p className="text-lg font-bold text-red-600">
-                      -₹{parseFloat(expense.amount).toFixed(2)}
+                      -₹{formatIndianNumber(parseFloat(expense.amount))}
                     </p>
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => handleDeleteExpense(expense.id)}
+                      className="h-8 w-8 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               );
