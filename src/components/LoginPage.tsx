@@ -97,31 +97,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold mb-2 sm:mb-3">
             <span className="gradient-text">SmartBudget</span>
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground mb-4 sm:mb-6 font-medium px-4 sm:px-0">
+          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-10 font-medium px-4 sm:px-0">
             Your intelligent financial companion
           </p>
-          
-          {/* Feature badges */}
-          <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap px-2">
-            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 border border-primary/20">
-              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-primary to-secondary rounded-full">
-                <Shield className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
-              </div>
-              <span className="text-xs sm:text-sm font-medium text-primary">Bank-Level Security</span>
-            </div>
-            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 transition-all duration-300 border border-secondary/20">
-              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-secondary to-primary rounded-full">
-                <TrendingUp className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
-              </div>
-              <span className="text-xs sm:text-sm font-medium text-secondary">Smart Analytics</span>
-            </div>
-            <div className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20">
-              <div className="p-1 sm:p-1.5 bg-gradient-to-br from-accent to-warning rounded-full">
-                <Sparkles className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-white" />
-              </div>
-              <span className="text-xs sm:text-sm font-medium text-accent">AI-Powered</span>
-            </div>
-          </div>
         </div>
 
         {/* Auth Card */}
