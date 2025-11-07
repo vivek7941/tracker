@@ -38,6 +38,8 @@ interface DashboardProps {
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'expenses' | 'goals' | 'budgets' | 'analytics'>('overview');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const stats = {
     balance: 850.50,
@@ -170,13 +172,144 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
           
           <div className="flex items-center gap-1 sm:gap-3">
-            <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10">
-              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
-            </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10 hidden sm:flex">
-              <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
+            {/* Notifications */}
+            <Sheet open={notificationsOpen} onOpenChange={setNotificationsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10">
+                  <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:w-96">
+                <div className="space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold">Notifications</h2>
+                    <p className="text-sm text-muted-foreground">Stay updated with your financial activities</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <TrendingUp className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">Budget Alert</p>
+                          <p className="text-xs text-muted-foreground mt-1">You've reached 80% of your Food budget</p>
+                          <p className="text-xs text-muted-foreground mt-2">2 hours ago</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-muted/30">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-secondary/10 rounded-lg">
+                          <Target className="h-4 w-4 text-secondary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">Goal Progress</p>
+                          <p className="text-xs text-muted-foreground mt-1">You're 40% closer to your Laptop goal!</p>
+                          <p className="text-xs text-muted-foreground mt-2">Yesterday</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-muted/30">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-accent/10 rounded-lg">
+                          <Sparkles className="h-4 w-4 text-accent" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">Savings Tip</p>
+                          <p className="text-xs text-muted-foreground mt-1">You could save ₹50 by reducing coffee expenses</p>
+                          <p className="text-xs text-muted-foreground mt-2">3 days ago</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            {/* Settings */}
+            <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10 hidden sm:flex">
+                  <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:w-96">
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-lg font-semibold">Settings</h2>
+                    <p className="text-sm text-muted-foreground">Manage your account and preferences</p>
+                  </div>
+
+                  {/* Profile Settings */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Profile</h3>
+                    <div className="space-y-2">
+                      <Button variant="ghost" className="w-full justify-start gap-3">
+                        <User className="h-4 w-4" />
+                        <span>Edit Profile</span>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start gap-3">
+                        <Bell className="h-4 w-4" />
+                        <span>Notification Preferences</span>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* App Preferences */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Preferences</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                        <div className="flex items-center gap-3">
+                          <DollarSign className="h-4 w-4" />
+                          <span className="text-sm">Currency</span>
+                        </div>
+                        <span className="text-sm font-medium text-muted-foreground">INR (₹)</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                        <div className="flex items-center gap-3">
+                          <Sparkles className="h-4 w-4" />
+                          <span className="text-sm">Theme</span>
+                        </div>
+                        <span className="text-sm font-medium text-muted-foreground">System</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Security */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Security</h3>
+                    <div className="space-y-2">
+                      <Button variant="ghost" className="w-full justify-start gap-3">
+                        <Settings className="h-4 w-4" />
+                        <span>Change Password</span>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* About */}
+                  <div className="space-y-3 pt-4 border-t">
+                    <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground">
+                      <span className="text-sm">Version 1.0.0</span>
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start gap-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        setSettingsOpen(false);
+                        onLogout();
+                      }}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <div className="h-6 sm:h-8 w-px bg-border hidden sm:block"></div>
             <Button 
               variant="ghost" 
