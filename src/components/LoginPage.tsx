@@ -107,7 +107,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
           <CardHeader className="text-center pb-4 sm:pb-6 relative px-4 sm:px-6 pt-6">
             <CardTitle className="text-2xl sm:text-3xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Welcome back
+              Welcome
             </CardTitle>
             <CardDescription className="text-sm sm:text-base font-medium">Login or create your account to get started</CardDescription>
           </CardHeader>
