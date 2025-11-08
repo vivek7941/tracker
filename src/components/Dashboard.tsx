@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "next-themes";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -47,7 +50,114 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileEditOpen, setProfileEditOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<{ full_name: string; currency: string } | null>(null);
+  const [currency, setCurrency] = useState("INR");
+  const [notificationPrefs, setNotificationPrefs] = useState({
+    budget_alerts: true,
+    goal_updates: true,
+    savings_tips: true,
+  });
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, currency, notification_budget_alerts, notification_goal_updates, notification_savings_tips")
+          .eq("id", user.id)
+          .single();
+        
+        if (profile) {
+          setUserProfile({
+            full_name: profile.full_name || "User",
+            currency: profile.currency || "INR",
+          });
+          setCurrency(profile.currency || "INR");
+          setNotificationPrefs({
+            budget_alerts: profile.notification_budget_alerts ?? true,
+            goal_updates: profile.notification_goal_updates ?? true,
+            savings_tips: profile.notification_savings_tips ?? true,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
+  };
+
+  const updateCurrency = async (newCurrency: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({ currency: newCurrency })
+        .eq("id", user.id);
+
+      if (error) throw error;
+
+      setCurrency(newCurrency);
+      toast({
+        title: "Success",
+        description: "Currency updated successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update currency",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const updateNotificationPrefs = async (prefs: typeof notificationPrefs) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          notification_budget_alerts: prefs.budget_alerts,
+          notification_goal_updates: prefs.goal_updates,
+          notification_savings_tips: prefs.savings_tips,
+        })
+        .eq("id", user.id);
+
+      if (error) throw error;
+
+      setNotificationPrefs(prefs);
+      toast({
+        title: "Success",
+        description: "Notification preferences updated",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update preferences",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getCurrencySymbol = (curr: string) => {
+    const symbols: Record<string, string> = {
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+      JPY: "¥",
+    };
+    return symbols[curr] || curr;
+  };
 
   const stats = {
     balance: 850.50,
@@ -265,10 +375,46 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                         <User className="h-4 w-4" />
                         <span>Edit Profile</span>
                       </Button>
-                      <Button variant="ghost" className="w-full justify-start gap-3">
-                        <Bell className="h-4 w-4" />
-                        <span>Notification Preferences</span>
-                      </Button>
+                      
+                      {/* Notification Preferences */}
+                      <div className="space-y-3 p-3 rounded-lg bg-muted/30">
+                        <div className="flex items-center gap-2">
+                          <Bell className="h-4 w-4" />
+                          <span className="text-sm font-medium">Notification Preferences</span>
+                        </div>
+                        <div className="space-y-2 ml-6">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="budget-alerts" className="text-sm font-normal">Budget Alerts</Label>
+                            <Switch
+                              id="budget-alerts"
+                              checked={notificationPrefs.budget_alerts}
+                              onCheckedChange={(checked) => 
+                                updateNotificationPrefs({ ...notificationPrefs, budget_alerts: checked })
+                              }
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="goal-updates" className="text-sm font-normal">Goal Updates</Label>
+                            <Switch
+                              id="goal-updates"
+                              checked={notificationPrefs.goal_updates}
+                              onCheckedChange={(checked) => 
+                                updateNotificationPrefs({ ...notificationPrefs, goal_updates: checked })
+                              }
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="savings-tips" className="text-sm font-normal">Savings Tips</Label>
+                            <Switch
+                              id="savings-tips"
+                              checked={notificationPrefs.savings_tips}
+                              onCheckedChange={(checked) => 
+                                updateNotificationPrefs({ ...notificationPrefs, savings_tips: checked })
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -276,12 +422,24 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   <div className="space-y-3">
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Preferences</h3>
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      {/* Currency Selector */}
+                      <div className="p-3 rounded-lg bg-muted/30 space-y-2">
                         <div className="flex items-center gap-3">
                           <DollarSign className="h-4 w-4" />
-                          <span className="text-sm">Currency</span>
+                          <span className="text-sm font-medium">Currency</span>
                         </div>
-                        <span className="text-sm font-medium text-muted-foreground">INR (₹)</span>
+                        <Select value={currency} onValueChange={updateCurrency}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="INR">INR (₹)</SelectItem>
+                            <SelectItem value="USD">USD ($)</SelectItem>
+                            <SelectItem value="EUR">EUR (€)</SelectItem>
+                            <SelectItem value="GBP">GBP (£)</SelectItem>
+                            <SelectItem value="JPY">JPY (¥)</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       
                       {/* Theme Switcher */}
@@ -357,15 +515,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </Sheet>
 
             <div className="h-6 sm:h-8 w-px bg-border hidden sm:block"></div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="gap-1 sm:gap-2 hover:bg-destructive/10 hover:text-destructive transition-all h-8 sm:h-9 px-2 sm:px-3"
-              onClick={onLogout}
-            >
-              <User className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="font-medium text-xs sm:text-sm hidden sm:inline">Logout</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
+                {userProfile?.full_name || "User"}
+              </span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="gap-1 sm:gap-2 hover:bg-destructive/10 hover:text-destructive transition-all h-8 sm:h-9 px-2 sm:px-3"
+                onClick={onLogout}
+              >
+                <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="font-medium text-xs sm:text-sm hidden sm:inline">Logout</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>

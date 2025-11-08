@@ -131,21 +131,33 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string | null
+          currency: string | null
           email: string | null
           full_name: string | null
           id: string
+          notification_budget_alerts: boolean | null
+          notification_goal_updates: boolean | null
+          notification_savings_tips: boolean | null
         }
         Insert: {
           created_at?: string | null
+          currency?: string | null
           email?: string | null
           full_name?: string | null
           id: string
+          notification_budget_alerts?: boolean | null
+          notification_goal_updates?: boolean | null
+          notification_savings_tips?: boolean | null
         }
         Update: {
           created_at?: string | null
+          currency?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          notification_budget_alerts?: boolean | null
+          notification_goal_updates?: boolean | null
+          notification_savings_tips?: boolean | null
         }
         Relationships: []
       }

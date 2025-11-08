@@ -34,7 +34,7 @@ export const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps
           .from("profiles")
           .select("full_name")
           .eq("id", user.id)
-          .single();
+          .maybeSingle();
         
         if (profile) {
           setFullName(profile.full_name || "");
