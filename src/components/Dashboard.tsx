@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useTheme } from "next-themes";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -23,12 +26,15 @@ import {
   LogOut,
   Sparkles,
   Menu,
-  X
+  X,
+  Moon,
+  Sun
 } from "lucide-react";
 import { ExpenseTracker } from "./ExpenseTracker";
 import { GoalTracker } from "./GoalTracker";
 import { BudgetOverview } from "./BudgetOverview";
 import { FinancialCharts } from "./FinancialCharts";
+import { ProfileEditDialog } from "./ProfileEditDialog";
 import logo from "@/assets/logo.png";
 
 interface DashboardProps {
@@ -40,6 +46,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileEditOpen, setProfileEditOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const stats = {
     balance: 850.50,
@@ -246,7 +254,14 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   <div className="space-y-3">
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Profile</h3>
                     <div className="space-y-2">
-                      <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start gap-3"
+                        onClick={() => {
+                          setProfileEditOpen(true);
+                          setSettingsOpen(false);
+                        }}
+                      >
                         <User className="h-4 w-4" />
                         <span>Edit Profile</span>
                       </Button>
@@ -268,12 +283,43 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                         </div>
                         <span className="text-sm font-medium text-muted-foreground">INR (₹)</span>
                       </div>
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          <Sparkles className="h-4 w-4" />
-                          <span className="text-sm">Theme</span>
+                      
+                      {/* Theme Switcher */}
+                      <div className="p-3 rounded-lg bg-muted/30 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Sparkles className="h-4 w-4" />
+                            <span className="text-sm font-medium">Theme</span>
+                          </div>
                         </div>
-                        <span className="text-sm font-medium text-muted-foreground">System</span>
+                        <div className="flex gap-2">
+                          <Button
+                            variant={theme === "light" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTheme("light")}
+                            className="flex-1 gap-2"
+                          >
+                            <Sun className="h-4 w-4" />
+                            Light
+                          </Button>
+                          <Button
+                            variant={theme === "dark" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTheme("dark")}
+                            className="flex-1 gap-2"
+                          >
+                            <Moon className="h-4 w-4" />
+                            Dark
+                          </Button>
+                          <Button
+                            variant={theme === "system" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTheme("system")}
+                            className="flex-1"
+                          >
+                            Auto
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -545,6 +591,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
       </div>
+
+      {/* Profile Edit Dialog */}
+      <ProfileEditDialog open={profileEditOpen} onOpenChange={setProfileEditOpen} />
     </div>
   );
 };
