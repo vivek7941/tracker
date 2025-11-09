@@ -482,17 +482,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     </div>
                   </div>
 
-                  {/* Security */}
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Security</h3>
-                    <div className="space-y-2">
-                      <Button variant="ghost" className="w-full justify-start gap-3">
-                        <Settings className="h-4 w-4" />
-                        <span>Change Password</span>
-                      </Button>
-                    </div>
-                  </div>
-
                   {/* About */}
                   <div className="space-y-3 pt-4 border-t">
                     <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground">
