@@ -38,6 +38,7 @@ import { GoalTracker } from "./GoalTracker";
 import { BudgetOverview } from "./BudgetOverview";
 import { FinancialCharts } from "./FinancialCharts";
 import { ProfileEditDialog } from "./ProfileEditDialog";
+import { FinancialAdvisorChat } from "./FinancialAdvisorChat";
 import logo from "@/assets/logo.png";
 
 interface DashboardProps {
@@ -743,6 +744,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
       </div>
+
+      {/* Financial Advisor Chat */}
+      <FinancialAdvisorChat />
 
       {/* Profile Edit Dialog */}
       <ProfileEditDialog open={profileEditOpen} onOpenChange={setProfileEditOpen} />
