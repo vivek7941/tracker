@@ -185,7 +185,7 @@ export const FinancialAdvisorChat = () => {
                     : "bg-muted"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                <p className="text-sm whitespace-pre-wrap">{msg.content.replace(/\*\*/g, '')}</p>
               </div>
               {msg.role === "user" && (
                 <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
