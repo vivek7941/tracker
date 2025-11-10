@@ -301,7 +301,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors h-8 w-8 sm:h-10 sm:w-10">
                   <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
+                  {visibleNotifications.length > 0 && (
+                    <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full animate-pulse"></span>
+                  )}
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-96">
