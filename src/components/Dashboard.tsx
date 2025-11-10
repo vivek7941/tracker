@@ -58,6 +58,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     goal_updates: true,
     savings_tips: true,
   });
+  const [visibleNotifications, setVisibleNotifications] = useState<string[]>(['budget', 'goal', 'savings']);
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
@@ -147,6 +148,10 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         variant: "destructive",
       });
     }
+  };
+
+  const dismissNotification = (id: string) => {
+    setVisibleNotifications(prev => prev.filter(notifId => notifId !== id));
   };
 
   const getCurrencySymbol = (curr: string) => {
@@ -306,42 +311,78 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                     <p className="text-sm text-muted-foreground">Stay updated with your financial activities</p>
                   </div>
                   <div className="space-y-3">
-                    <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <TrendingUp className="h-4 w-4 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-medium text-sm">Budget Alert</p>
-                          <p className="text-xs text-muted-foreground mt-1">You've reached 80% of your Food budget</p>
-                          <p className="text-xs text-muted-foreground mt-2">2 hours ago</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-4 rounded-lg bg-muted/30">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-secondary/10 rounded-lg">
-                          <Target className="h-4 w-4 text-secondary" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-medium text-sm">Goal Progress</p>
-                          <p className="text-xs text-muted-foreground mt-1">You're 40% closer to your Laptop goal!</p>
-                          <p className="text-xs text-muted-foreground mt-2">Yesterday</p>
+                    {visibleNotifications.includes('budget') && (
+                      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <TrendingUp className="h-4 w-4 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-sm">Budget Alert</p>
+                            <p className="text-xs text-muted-foreground mt-1">You've reached 80% of your Food budget</p>
+                            <p className="text-xs text-muted-foreground mt-2">2 hours ago</p>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 -mt-1 -mr-1 hover:bg-primary/10"
+                            onClick={() => dismissNotification('budget')}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
                         </div>
                       </div>
-                    </div>
-                    <div className="p-4 rounded-lg bg-muted/30">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-accent/10 rounded-lg">
-                          <Sparkles className="h-4 w-4 text-accent" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-medium text-sm">Savings Tip</p>
-                          <p className="text-xs text-muted-foreground mt-1">You could save ₹50 by reducing coffee expenses</p>
-                          <p className="text-xs text-muted-foreground mt-2">3 days ago</p>
+                    )}
+                    {visibleNotifications.includes('goal') && (
+                      <div className="p-4 rounded-lg bg-muted/30">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 bg-secondary/10 rounded-lg">
+                            <Target className="h-4 w-4 text-secondary" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-sm">Goal Progress</p>
+                            <p className="text-xs text-muted-foreground mt-1">You're 40% closer to your Laptop goal!</p>
+                            <p className="text-xs text-muted-foreground mt-2">Yesterday</p>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 -mt-1 -mr-1 hover:bg-secondary/10"
+                            onClick={() => dismissNotification('goal')}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
                         </div>
                       </div>
-                    </div>
+                    )}
+                    {visibleNotifications.includes('savings') && (
+                      <div className="p-4 rounded-lg bg-muted/30">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 bg-accent/10 rounded-lg">
+                            <Sparkles className="h-4 w-4 text-accent" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-sm">Savings Tip</p>
+                            <p className="text-xs text-muted-foreground mt-1">You could save ₹50 by reducing coffee expenses</p>
+                            <p className="text-xs text-muted-foreground mt-2">3 days ago</p>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 -mt-1 -mr-1 hover:bg-accent/10"
+                            onClick={() => dismissNotification('savings')}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                    {visibleNotifications.length === 0 && (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Bell className="h-12 w-12 mx-auto mb-3 opacity-20" />
+                        <p className="text-sm">No notifications</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </SheetContent>
