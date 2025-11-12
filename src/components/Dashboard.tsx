@@ -31,7 +31,8 @@ import {
   Menu,
   X,
   Moon,
-  Sun
+  Sun,
+  Edit
 } from "lucide-react";
 import { ExpenseTracker } from "./ExpenseTracker";
 import { GoalTracker } from "./GoalTracker";
@@ -39,6 +40,7 @@ import { BudgetOverview } from "./BudgetOverview";
 import { FinancialCharts } from "./FinancialCharts";
 import { ProfileEditDialog } from "./ProfileEditDialog";
 import { FinancialAdvisorChat } from "./FinancialAdvisorChat";
+import { FinancialSummaryDialog } from "./FinancialSummaryDialog";
 import logo from "@/assets/logo.png";
 
 interface DashboardProps {
@@ -59,6 +61,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     savings_tips: true,
   });
   const [visibleNotifications, setVisibleNotifications] = useState<string[]>(['budget', 'goal', 'savings']);
+  const [financialSummaryOpen, setFinancialSummaryOpen] = useState(false);
+  const [stats, setStats] = useState({
+    balance: 0,
+    income: 0,
+    expenses: 0,
+    savings: 0
+  });
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
@@ -72,9 +81,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       if (user) {
         const { data: profile } = await supabase
           .from("profiles")
-          .select("full_name, currency, notification_budget_alerts, notification_goal_updates, notification_savings_tips")
+          .select("full_name, currency, notification_budget_alerts, notification_goal_updates, notification_savings_tips, balance, income, expenses, savings")
           .eq("id", user.id)
-          .single();
+          .single() as any;
         
         if (profile) {
           setUserProfile({
@@ -86,6 +95,12 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             budget_alerts: profile.notification_budget_alerts ?? true,
             goal_updates: profile.notification_goal_updates ?? true,
             savings_tips: profile.notification_savings_tips ?? true,
+          });
+          setStats({
+            balance: profile.balance || 0,
+            income: profile.income || 0,
+            expenses: profile.expenses || 0,
+            savings: profile.savings || 0,
           });
         }
       }
@@ -165,12 +180,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     return symbols[curr] || curr;
   };
 
-  const stats = {
-    balance: 850.50,
-    income: 500.00,
-    expenses: 190.75,
-    savings: 320.00
-  };
 
   const expenses = [
     { id: 1, category: "Food", amount: 85.60, description: "Groceries", date: "Today", icon: ShoppingCart },
@@ -598,6 +607,17 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
           {activeTab === 'overview' && (
             <div className="space-y-6 sm:space-y-8">
+              {/* Edit Button for Financial Summary */}
+              <div className="flex justify-end">
+                <Button
+                  onClick={() => setFinancialSummaryOpen(true)}
+                  className="gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+                >
+                  <Settings className="h-4 w-4" />
+                  Edit Financial Summary
+                </Button>
+              </div>
+
               {/* Stats Cards - More Compact & Modern */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                 <Card className="stat-card border-0 shadow-md hover:shadow-xl transition-all duration-500 group cursor-pointer overflow-hidden relative backdrop-blur-sm">
@@ -793,6 +813,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
       {/* Profile Edit Dialog */}
       <ProfileEditDialog open={profileEditOpen} onOpenChange={setProfileEditOpen} />
+
+      {/* Financial Summary Dialog */}
+      <FinancialSummaryDialog 
+        open={financialSummaryOpen} 
+        onOpenChange={setFinancialSummaryOpen} 
+        onUpdate={loadUserProfile}
+      />
     </div>
   );
 };
