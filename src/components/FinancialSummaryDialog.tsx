@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { financialSummarySchema } from "@/lib/validation";
 
 interface FinancialSummaryDialogProps {
   open: boolean;
@@ -50,6 +51,24 @@ export const FinancialSummaryDialog = ({ open, onOpenChange, onUpdate }: Financi
   };
 
   const handleSave = async () => {
+    // Validate input
+    const validation = financialSummarySchema.safeParse({
+      balance,
+      income,
+      expenses,
+      savings,
+    });
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -58,10 +77,10 @@ export const FinancialSummaryDialog = ({ open, onOpenChange, onUpdate }: Financi
       const { error } = await supabase
         .from("profiles")
         .update({
-          balance: parseFloat(balance) || 0,
-          income: parseFloat(income) || 0,
-          expenses: parseFloat(expenses) || 0,
-          savings: parseFloat(savings) || 0,
+          balance: parseFloat(validation.data.balance),
+          income: parseFloat(validation.data.income),
+          expenses: parseFloat(validation.data.expenses),
+          savings: parseFloat(validation.data.savings),
         } as any)
         .eq("id", user.id);
 
@@ -77,7 +96,7 @@ export const FinancialSummaryDialog = ({ open, onOpenChange, onUpdate }: Financi
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to update financial summary",
+        description: "Unable to save changes. Please try again.",
         variant: "destructive",
       });
     } finally {

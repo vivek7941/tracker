@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, AlertTriangle, CheckCircle, ShoppingCart, Car, Gamepad2, Coffee } from "lucide-react";
 import { formatIndianNumber } from "@/lib/utils";
+import { budgetSchema } from "@/lib/validation";
 
 const BudgetOverview = () => {
   const [budgets, setBudgets] = useState([]);
@@ -55,39 +56,50 @@ const BudgetOverview = () => {
   ];
 
   const addNewBudget = async () => {
-    if (newBudget.category && newBudget.budgetAmount) {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    // Validate input
+    const validation = budgetSchema.safeParse(newBudget);
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
-      const { error } = await supabase
-        .from('budgets')
-        .insert([{
-          user_id: user.id,
-          category: newBudget.category,
-          budget_amount: parseFloat(newBudget.budgetAmount),
-          spent_amount: 0,
-          period: newBudget.period
-        }]);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to add budget",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: "Budget created",
-        });
-        fetchBudgets();
-        setNewBudget({
-          category: "",
-          budgetAmount: "",
-          period: "monthly"
-        });
-        setIsAddDialogOpen(false);
-      }
+    const { error } = await supabase
+      .from('budgets')
+      .insert([{
+        user_id: user.id,
+        category: validation.data.category,
+        budget_amount: parseFloat(validation.data.budgetAmount),
+        spent_amount: 0,
+        period: validation.data.period
+      }]);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Unable to save budget. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Budget created",
+      });
+      fetchBudgets();
+      setNewBudget({
+        category: "",
+        budgetAmount: "",
+        period: "monthly"
+      });
+      setIsAddDialogOpen(false);
     }
   };
 

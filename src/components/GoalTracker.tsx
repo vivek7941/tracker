@@ -10,6 +10,7 @@ import { Plus, Target, Laptop, Plane, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatIndianNumber } from "@/lib/utils";
+import { goalSchema } from "@/lib/validation";
 
 const GoalTracker = () => {
   const [goals, setGoals] = useState([]);
@@ -48,40 +49,51 @@ const GoalTracker = () => {
   };
 
   const handleAddGoal = async () => {
-    if (newGoal.name && newGoal.target_amount && newGoal.deadline) {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    // Validate input
+    const validation = goalSchema.safeParse(newGoal);
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
-      const { error } = await supabase
-        .from('goals')
-        .insert([{
-          user_id: user.id,
-          name: newGoal.name,
-          target_amount: parseFloat(newGoal.target_amount),
-          current_amount: parseFloat(newGoal.current_amount) || 0,
-          deadline: newGoal.deadline,
-        }]);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to add goal",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: "Goal created",
-        });
-        fetchGoals();
-        setNewGoal({
-          name: "",
-          target_amount: "",
-          current_amount: "0",
-          deadline: "",
-        });
-        setIsAddDialogOpen(false);
-      }
+    const { error } = await supabase
+      .from('goals')
+      .insert([{
+        user_id: user.id,
+        name: validation.data.name,
+        target_amount: parseFloat(validation.data.target_amount),
+        current_amount: parseFloat(validation.data.current_amount),
+        deadline: validation.data.deadline,
+      }]);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Unable to save goal. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Goal created",
+      });
+      fetchGoals();
+      setNewGoal({
+        name: "",
+        target_amount: "",
+        current_amount: "0",
+        deadline: "",
+      });
+      setIsAddDialogOpen(false);
     }
   };
 
@@ -138,6 +150,7 @@ const GoalTracker = () => {
                   placeholder="e.g., New Laptop"
                   value={newGoal.name}
                   onChange={(e) => setNewGoal({...newGoal, name: e.target.value})}
+                  maxLength={100}
                 />
               </div>
               

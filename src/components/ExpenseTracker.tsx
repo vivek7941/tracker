@@ -10,6 +10,7 @@ import { Plus, Calendar, ShoppingCart, Car, Coffee, Gamepad2, Trash2 } from "luc
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatIndianNumber } from "@/lib/utils";
+import { expenseSchema } from "@/lib/validation";
 
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
@@ -55,40 +56,51 @@ const ExpenseTracker = () => {
   };
 
   const handleAddExpense = async () => {
-    if (newExpense.description && newExpense.amount && newExpense.category) {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    // Validate input
+    const validation = expenseSchema.safeParse(newExpense);
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
-      const { error } = await supabase
-        .from('expenses')
-        .insert([{
-          user_id: user.id,
-          description: newExpense.description,
-          amount: parseFloat(newExpense.amount),
-          category: newExpense.category,
-          date: newExpense.date,
-        }]);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to add expense",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: "Expense added",
-        });
-        fetchExpenses();
-        setNewExpense({
-          description: "",
-          amount: "",
-          category: "",
-          date: new Date().toISOString().split('T')[0],
-        });
-        setIsAddDialogOpen(false);
-      }
+    const { error } = await supabase
+      .from('expenses')
+      .insert([{
+        user_id: user.id,
+        description: validation.data.description,
+        amount: parseFloat(validation.data.amount),
+        category: validation.data.category,
+        date: validation.data.date,
+      }]);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Unable to save expense. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Expense added",
+      });
+      fetchExpenses();
+      setNewExpense({
+        description: "",
+        amount: "",
+        category: "",
+        date: new Date().toISOString().split('T')[0],
+      });
+      setIsAddDialogOpen(false);
     }
   };
 
@@ -150,6 +162,7 @@ const ExpenseTracker = () => {
                   placeholder="What did you buy?"
                   value={newExpense.description}
                   onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
+                  maxLength={500}
                 />
               </div>
               

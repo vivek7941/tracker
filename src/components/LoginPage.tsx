@@ -8,6 +8,7 @@ import { Wallet, TrendingUp, Shield, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
+import { authSchema } from "@/lib/validation";
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -23,17 +24,31 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate input
+    const validation = authSchema.safeParse({ email, password });
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: validation.data.email,
+      password: validation.data.password,
     });
 
     if (error) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again.",
         variant: "destructive",
       });
     } else {
@@ -44,23 +59,37 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate input
+    const validation = authSchema.safeParse({ email, password, name });
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Validation Error",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email: validation.data.email,
+      password: validation.data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
         data: {
-          full_name: name,
+          full_name: validation.data.name,
         },
       },
     });
 
     if (error) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Registration Failed",
+        description: "Unable to create account. Please try again.",
         variant: "destructive",
       });
     } else {
@@ -74,24 +103,30 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
+    
+    // Validate email
+    const emailSchema = authSchema.pick({ email: true });
+    const validation = emailSchema.safeParse({ email });
+    
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
       toast({
-        title: "Error",
-        description: "Please enter your email address",
+        title: "Validation Error",
+        description: firstError.message,
         variant: "destructive",
       });
       return;
     }
     
     setIsLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(validation.data.email, {
       redirectTo: `${window.location.origin}/`,
     });
 
     if (error) {
       toast({
         title: "Error",
-        description: error.message,
+        description: "Unable to send reset link. Please try again.",
         variant: "destructive",
       });
     } else {
@@ -257,6 +292,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                       placeholder="Your Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      maxLength={100}
                       required
                     />
                   </div>
