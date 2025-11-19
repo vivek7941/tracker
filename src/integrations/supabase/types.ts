@@ -130,34 +130,46 @@ export type Database = {
       }
       profiles: {
         Row: {
+          balance: number | null
           created_at: string | null
           currency: string | null
           email: string | null
+          expenses: number | null
           full_name: string | null
           id: string
+          income: number | null
           notification_budget_alerts: boolean | null
           notification_goal_updates: boolean | null
           notification_savings_tips: boolean | null
+          savings: number | null
         }
         Insert: {
+          balance?: number | null
           created_at?: string | null
           currency?: string | null
           email?: string | null
+          expenses?: number | null
           full_name?: string | null
           id: string
+          income?: number | null
           notification_budget_alerts?: boolean | null
           notification_goal_updates?: boolean | null
           notification_savings_tips?: boolean | null
+          savings?: number | null
         }
         Update: {
+          balance?: number | null
           created_at?: string | null
           currency?: string | null
           email?: string | null
+          expenses?: number | null
           full_name?: string | null
           id?: string
+          income?: number | null
           notification_budget_alerts?: boolean | null
           notification_goal_updates?: boolean | null
           notification_savings_tips?: boolean | null
+          savings?: number | null
         }
         Relationships: []
       }
